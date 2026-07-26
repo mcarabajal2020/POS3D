@@ -63,7 +63,7 @@ Sistema de punto de venta (POS) para negocios de impresión 3D, desarrollado con
 
 - **Backend:** Laravel 13, PHP 8.4
 - **Frontend:** Filament v5, Livewire 4, Alpine.js, Tailwind CSS
-- **Base de datos:** SQLite (desarrollo) / MySQL / PostgreSQL
+- **Base de datos:** MySQL 8.0+
 - **PDF:** barryvdh/laravel-dompdf
 - **Moneda:** Pesos argentinos (ARS)
 
@@ -82,7 +82,18 @@ npm install
 cp .env.example .env
 php artisan key:generate
 
-# Base de datos
+# Crear base de datos MySQL
+mysql -u root -e "CREATE DATABASE pos3d"
+
+# Configurar .env con tus credenciales de MySQL
+# DB_CONNECTION=mysql
+# DB_HOST=127.0.0.1
+# DB_PORT=3306
+# DB_DATABASE=pos3d
+# DB_USERNAME=root
+# DB_PASSWORD=
+
+# Ejecutar migraciones y seeders
 php artisan migrate --seed
 
 # Compilar assets
