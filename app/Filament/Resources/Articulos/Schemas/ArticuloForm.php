@@ -17,11 +17,11 @@ class ArticuloForm
     {
         $ultimoSku = Articulo::query()
             ->where('codigo_sku', 'like', 'SKU-%')
-            ->orderByRaw("CAST(SUBSTR(codigo_sku, 5) AS INTEGER) DESC")
+            ->orderByRaw('CAST(SUBSTR(codigo_sku, 5) AS INTEGER) DESC')
             ->value('codigo_sku');
 
         if ($ultimoSku && preg_match('/^SKU-(\d+)$/', $ultimoSku, $matches)) {
-            return 'SKU-' . str_pad((int) $matches[1] + 1, 5, '0', STR_PAD_LEFT);
+            return 'SKU-'.str_pad((int) $matches[1] + 1, 5, '0', STR_PAD_LEFT);
         }
 
         return 'SKU-00001';
@@ -70,14 +70,6 @@ class ArticuloForm
                             ->minValue(0)
                             ->default(0)
                             ->suffix('gramos')
-                            ->live(onBlur: true),
-                        TextInput::make('costo_filamento_kg')
-                            ->label('Precio del filamento')
-                            ->numeric()
-                            ->default($costoFilamentoKg)
-                            ->prefix('$')
-                            ->suffix('/ kg')
-                            ->dehydrated(false)
                             ->live(onBlur: true),
                     ]),
 

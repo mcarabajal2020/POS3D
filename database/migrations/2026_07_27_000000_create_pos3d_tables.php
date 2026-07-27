@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('nombre');
             $table->text('descripcion')->nullable();
             $table->string('tipo_material')->default('PLA');
+            $table->decimal('filamento_gramos', 8, 2)->default(0);
             $table->integer('consumo_watts')->default(120);
             $table->unsignedInteger('costo_kwh')->default(50);
             $table->unsignedInteger('desgaste_maquina')->default(120);
