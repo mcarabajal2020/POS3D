@@ -152,4 +152,144 @@ class ConfiguracionPage extends Page
             'mail.from.name' => $data['mail_from_name'] ?? '',
         ]);
     }
+
+    public function probarConexion(): void
+    {
+        $data = $this->form->getState();
+        $mailer = $data['mail_mailer'] ?? 'smtp';
+
+        if ($mailer !== 'smtp') {
+            Notification::make()
+                ->title('Transporte no soportado')
+                ->body('La prueba de conexión solo está disponible para SMTP.')
+                ->warning()
+                ->send();
+
+            return;
+        }
+
+        $host = $data['mail_host'] ?? '';
+        $port = (int) ($data['mail_port'] ?? 587);
+        $username = $data['mail_username'] ?? '';
+        $password = $data['mail_password'] ?? '';
+        $encryption = $data['mail_encryption'] ?? 'tls';
+        $fromAddress = $data['mail_from_address'] ?? '';
+        $fromName = $data['mail_from_name'] ?? config('app.name');
+
+        if (empty($host)) {
+            Notification::make()
+                ->title('Error')
+                ->body('Debe configurar el servidor SMTP.')
+                ->danger()
+                ->send();
+
+            return;
+        }
+
+        if (empty($fromAddress)) {
+            Notification::make()
+                ->title('Error')
+                ->body('Debe configurar el email remitente.')
+                ->danger()
+                ->send();
+
+            return;
+        }
+
+        try {
+            $connection = $this->smtpConnect($host, $port, $encryption, $username, $password);
+
+            Notification::make()
+                ->title('Conexión exitosa')
+                ->body("Se conectó correctamente a {$host}:{$port}")
+                ->success()
+                ->send();
+        } catch (\Exception $e) {
+            Notification::make()
+                ->title('Error de conexión')
+                ->body("No se pudo conectar a {$host}:{$port}. {$e->getMessage()}")
+                ->danger()
+                ->send();
+        }
+    }
+
+    private function smtpConnect(string $host, int $port, string $encryption, string $username, string $password): void
+    {
+        $errno = 0;
+        $errstr = '';
+
+        $scheme = match ($encryption) {
+            'ssl' => 'ssl://',
+            default => 'tcp://',
+        };
+
+        $fp = fsockopen($scheme.$host, $port, $errno, $errstr, 10);
+
+        if (! $fp) {
+            throw new \RuntimeException("No se pudo conectar: {$errstr} (código: {$errno})");
+        }
+
+        $response = fgets($fp, 512);
+
+        if (str_starts_with($response, '220') === false) {
+            fclose($fp);
+            throw new \RuntimeException("Respuesta inesperada del servidor: {$response}");
+        }
+
+        fwrite($fp, "EHLO localhost\r\n");
+        $this->readSmtpResponse($fp);
+
+        if ($encryption === 'tls') {
+            fwrite($fp, "STARTTLS\r\n");
+            $starttlsResponse = fgets($fp, 512);
+
+            if (str_starts_with($starttlsResponse, '220') === false) {
+                fclose($fp);
+                throw new \RuntimeException("STARTTLS no soportado: {$starttlsResponse}");
+            }
+
+            $crypto = stream_socket_enable_crypto($fp, true, STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT | STREAM_CRYPTO_METHOD_TLSv1_3_CLIENT);
+
+            if (! $crypto) {
+                fclose($fp);
+                throw new \RuntimeException('Error al habilitar TLS.');
+            }
+
+            fwrite($fp, "EHLO localhost\r\n");
+            $this->readSmtpResponse($fp);
+        }
+
+        if (! empty($username) && ! empty($password)) {
+            fwrite($fp, "AUTH LOGIN\r\n");
+            $authResponse = fgets($fp, 512);
+
+            if (! str_starts_with($authResponse, '334')) {
+                fclose($fp);
+                throw new \RuntimeException("AUTH LOGIN no soportado: {$authResponse}");
+            }
+
+            fwrite($fp, base64_encode($username)."\r\n");
+            fgets($fp, 512);
+
+            fwrite($fp, base64_encode($password)."\r\n");
+            $passResponse = fgets($fp, 512);
+
+            if (! str_starts_with($passResponse, '235')) {
+                fclose($fp);
+                throw new \RuntimeException('Autenticación fallida. Verifique usuario y contraseña.');
+            }
+        }
+
+        fwrite($fp, "QUIT\r\n");
+        fclose($fp);
+    }
+
+    private function readSmtpResponse($fp): void
+    {
+        while (($line = fgets($fp, 512)) !== false) {
+            if (preg_match('/^\d{3}-/', $line) === 0) {
+                break;
+            }
+        }
+    }
 }
