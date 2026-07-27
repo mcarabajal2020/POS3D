@@ -22,7 +22,7 @@ class MailConfigService
             'mail.mailers.smtp.username' => Configuracion::get('mail_username', ''),
             'mail.mailers.smtp.password' => Configuracion::get('mail_password', ''),
             'mail.mailers.smtp.encryption' => Configuracion::get('mail_encryption', 'tls'),
-            'mail.from.address' => Configuracion::get('mail_from_address', ''),
+            'mail.from.address' => Configuracion::get('mail_from_address', 'no-reply@techxpress.com'),
             'mail.from.name' => Configuracion::get('mail_from_name', config('app.name')),
         ]);
     }
