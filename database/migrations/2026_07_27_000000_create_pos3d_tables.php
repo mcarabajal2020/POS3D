@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('telefono')->nullable();
             $table->string('email')->nullable();
             $table->string('condicion_iva');
-            $table->integer('saldo')->default(0)->after('condicion_iva');
+            $table->integer('saldo')->default(0);
             $table->timestamps();
         });
 
@@ -25,17 +25,17 @@ return new class extends Migration
             $table->string('codigo_sku')->unique();
             $table->string('nombre');
             $table->text('descripcion')->nullable();
-            $table->string('tipo_material')->default('PLA')->after('descripcion');
-            $table->integer('consumo_watts')->default(120)->after('tipo_material');
-            $table->unsignedInteger('costo_kwh')->default(50)->after('consumo_watts');
-            $table->unsignedInteger('desgaste_maquina')->default(120)->after('costo_kwh');
-            $table->unsignedInteger('costo_mano_obra')->default(0)->after('desgaste_maquina');
+            $table->string('tipo_material')->default('PLA');
+            $table->integer('consumo_watts')->default(120);
+            $table->unsignedInteger('costo_kwh')->default(50);
+            $table->unsignedInteger('desgaste_maquina')->default(120);
+            $table->unsignedInteger('costo_mano_obra')->default(0);
             $table->decimal('horas_impresion', 8, 2)->default(0);
-            $table->unsignedInteger('tiempo_minutos')->default(0)->after('horas_impresion');
-            $table->decimal('horas_trabajo', 8, 2)->default(0)->after('costo_mano_obra');
-            $table->unsignedInteger('extras')->default(0)->after('horas_trabajo');
-            $table->unsignedInteger('margen_ganancia')->default(4)->after('extras');
-            $table->unsignedInteger('cantidad_piezas')->default(1)->after('margen_ganancia');
+            $table->unsignedInteger('tiempo_minutos')->default(0);
+            $table->decimal('horas_trabajo', 8, 2)->default(0);
+            $table->unsignedInteger('extras')->default(0);
+            $table->unsignedInteger('margen_ganancia')->default(4);
+            $table->unsignedInteger('cantidad_piezas')->default(1);
             $table->unsignedInteger('precio_venta')->default(0);
             $table->unsignedInteger('stock')->default(0);
             $table->timestamps();
@@ -48,7 +48,7 @@ return new class extends Migration
             $table->string('estado')->default('presupuesto');
             $table->unsignedInteger('total')->default(0);
             $table->unsignedInteger('descuento')->default(0);
-            $table->string('tipo_venta')->default('contado')->after('descuento');
+            $table->string('tipo_venta')->default('contado');
             $table->string('factura_tipo')->nullable();
             $table->string('factura_numero')->nullable();
             $table->string('factura_cae')->nullable();
@@ -79,7 +79,7 @@ return new class extends Migration
             $table->id();
             $table->string('clave')->unique();
             $table->unsignedInteger('valor')->default(0);
-            $table->string('texto')->nullable()->after('valor');
+            $table->string('texto')->nullable();
             $table->timestamps();
         });
     }
