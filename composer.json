@@ -30,9 +30,7 @@
         "psr-4": {
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
-            "Database\\Seeders\\": "database/seeders/",
-            "Rezadaulay\\FilamentWhatsappNotification\\": "packages/filament-whatsapp-notification/src/",
-            "Rezadaulay\\FilamentWhatsappNotification\\Database\\Factories\\": "packages/filament-whatsapp-notification/database/factories/"
+            "Database\\Seeders\\": "database/seeders/"
         }
     },
     "autoload-dev": {

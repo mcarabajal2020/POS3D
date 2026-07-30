@@ -33,11 +33,6 @@ class Cliente extends Model
         return $this->hasMany(MovimientoCuentaCorriente::class);
     }
 
-    public function routeNotificationForWhatsapp(): string
-    {
-        return $this->telefono;
-    }
-
     public function getFormattedSaldoAttribute(): string
     {
         return ($this->saldo >= 0 ? '' : '-').'$ '.number_format(abs($this->saldo), 0, ',', '.');
