@@ -19,6 +19,7 @@ use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Rezadaulay\FilamentWhatsappNotification\FilamentWhatsappNotificationPlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -62,6 +63,10 @@ class AdminPanelProvider extends PanelProvider
                     ->dashboard()
                     ->documentation(false)
                     ->navigationGroup('Mercado Pago'),
+            )
+            ->plugin(
+                FilamentWhatsappNotificationPlugin::make()
+                    ->connectionPage(),
             );
     }
 }
