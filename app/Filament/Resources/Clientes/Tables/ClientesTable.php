@@ -7,6 +7,7 @@ use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -19,7 +20,7 @@ class ClientesTable
                 TextColumn::make('nombre')
                     ->searchable()
                     ->sortable()
-                    ->weight(\Filament\Support\Enums\FontWeight::Bold),
+                    ->weight(FontWeight::Bold),
                 TextColumn::make('cuit_cuil')
                     ->label('CUIT/CUIL')
                     ->searchable(),
@@ -39,7 +40,7 @@ class ClientesTable
                     ->label('Teléfono'),
                 TextColumn::make('saldo')
                     ->label('Saldo CC')
-                    ->formatStateUsing(fn (int $state): string => '$ ' . number_format($state, 0, ',', '.'))
+                    ->formatStateUsing(fn (int $state): string => '$ '.number_format($state, 0, ',', '.'))
                     ->badge()
                     ->color(fn (int $state): string => match (true) {
                         $state > 0 => 'danger',
@@ -60,10 +61,19 @@ class ClientesTable
                     ->color('info')
                     ->modalHeading('Historial de movimientos')
                     ->modalSubmitAction(false)
-                    ->modalContent(fn ($record) => view('filament.resources.clientes.tables.historial-modal', [
-                        'movimientos' => $record->movimientos()->latest()->get(),
-                        'saldo' => $record->saldo,
-                    ])),
+                    ->modalContent(function ($record) {
+                        $movimientos = $record->movimientos()->latest()->get();
+                        $ventas = $record->ventas()
+                            ->where('tipo_venta', '!=', 'cuenta_corriente')
+                            ->latest()
+                            ->get();
+
+                        return view('filament.resources.clientes.tables.historial-modal', [
+                            'movimientos' => $movimientos,
+                            'ventas' => $ventas,
+                            'saldo' => $record->saldo,
+                        ]);
+                    }),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
