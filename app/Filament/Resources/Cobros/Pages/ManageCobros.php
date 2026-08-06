@@ -13,6 +13,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\Page;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 
 class ManageCobros extends Page
 {
@@ -33,7 +34,7 @@ class ManageCobros extends Page
         $this->form->fill($this->data);
     }
 
-    public function form(\Filament\Schemas\Schema $schema): \Filament\Schemas\Schema
+    public function form(Schema $schema): Schema
     {
         return $schema
             ->statePath('data')
@@ -116,7 +117,7 @@ class ManageCobros extends Page
 
         Notification::make()
             ->title('Cobro registrado')
-            ->body("{$cliente->nombre} - $" . number_format($monto, 0, ',', '.'))
+            ->body("{$cliente->nombre} - $".number_format($monto, 0, ',', '.'))
             ->success()
             ->send();
 
@@ -132,10 +133,6 @@ class ManageCobros extends Page
     private function aplicarSaldoACuentaCorriente(Cliente $cliente, int $monto, array $data): void
     {
         $cliente->refresh();
-
-        if ($cliente->saldo <= 0) {
-            return;
-        }
 
         $montoRestante = $monto;
 
@@ -154,10 +151,9 @@ class ManageCobros extends Page
             }
         }
 
-        if ($montoRestante > 0 && $cliente->saldo > 0) {
-            $pago = min($montoRestante, $cliente->saldo);
+        if ($montoRestante > 0) {
             app(CuentaCorrienteService::class)
-                ->registrarPago($cliente, $pago, 'Pago general');
+                ->registrarPago($cliente, $montoRestante, 'Pago general');
         }
     }
 
@@ -177,7 +173,7 @@ class ManageCobros extends Page
                         'currency_id' => 'ARS',
                     ],
                 ],
-                externalReference: "cobro_{$cliente->id}_" . time(),
+                externalReference: "cobro_{$cliente->id}_".time(),
                 backUrls: [
                     'success' => route('filament.admin.resources.cobros.index'),
                     'failure' => route('filament.admin.resources.cobros.index'),
