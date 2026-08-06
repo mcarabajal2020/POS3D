@@ -40,10 +40,7 @@
                 @foreach($allRecords as $item)
                     @php
                         $ventaUrl = $item['venta_id']
-                            ? \Filament\Facades\Filament::getPanel('admin')->getUrlBuilder()
-                                ->forRecord(\App\Models\Venta::find($item['venta_id']))
-                                ->resources()
-                                ->edit()
+                            ? \App\Filament\Resources\VentaResource::getUrl('edit', ['record' => $item['venta_id']])
                             : null;
                     @endphp
                     <tr class="border-b border-gray-100 dark:border-gray-800">
