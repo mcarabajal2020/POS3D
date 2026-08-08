@@ -11,6 +11,7 @@ use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
+use Filament\View\PanelsRenderHook;
 use Hammadzafar05\MobileBottomNav\MobileBottomNav;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -64,6 +65,9 @@ class AdminPanelProvider extends PanelProvider
                     ->fromNavigation(4)
                     ->moreButtonLabel('Más'),
             )
-            ->footer(fn () => 'v'.config('app.version', '1.0.0'));
+            ->renderHook(
+                PanelsRenderHook::SIDEBAR_FOOTER,
+                fn () => '<div class="flex items-center justify-center py-3 text-xs text-gray-400 dark:text-gray-500">v'.config('app.version', '1.0.0').'</div>',
+            );
     }
 }
