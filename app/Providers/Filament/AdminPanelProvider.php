@@ -63,6 +63,7 @@ class AdminPanelProvider extends PanelProvider
                 MobileBottomNav::make()
                     ->fromNavigation(4)
                     ->moreButtonLabel('Más'),
-            );
+            )
+            ->footer(fn () => 'v'.config('app.version', '1.0.0'));
     }
 }
