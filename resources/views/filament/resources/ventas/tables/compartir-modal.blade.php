@@ -37,7 +37,11 @@
 
     @php
         $telefono = preg_replace('/[^0-9]/', '', $venta->cliente->telefono ?? '');
-        $mensaje = "Comprobante de venta #{$venta->id}\nTotal: {$venta->formatted_total}";
+        if (!empty($telefono) && !str_starts_with($telefono, '549')) {
+            $telefono = '549' . $telefono;
+        }
+        $pdfUrl = route('comprobante.pdf', $venta->id);
+        $mensaje = "Comprobante de venta #{$venta->id}\nTotal: {$venta->formatted_total}\n\nDescargá el comprobante: {$pdfUrl}";
         $whatsappUrl = "https://wa.me/{$telefono}?text=" . urlencode($mensaje);
     @endphp
 
