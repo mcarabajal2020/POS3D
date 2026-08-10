@@ -8,8 +8,9 @@ use App\Models\User;
 use BackedEnum;
 use Filament\Forms;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Repeater;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
-use Filament\Support\Enums\FontWeight;
 use Filament\Tables;
 use Filament\Tables\Table;
 
@@ -29,7 +30,7 @@ class UserResource extends Resource
     {
         return $schema
             ->schema([
-                Forms\Components\Section::make('Datos del Usuario')
+                Section::make('Datos del Usuario')
                     ->schema([
                         Forms\Components\TextInput::make('name')
                             ->required()
@@ -46,9 +47,9 @@ class UserResource extends Resource
                             ->required(fn (string $operation): bool => $operation === 'create')
                             ->maxLength(255),
                     ])->columns(2),
-                Forms\Components\Section::make('Empresas')
+                Section::make('Empresas')
                     ->schema([
-                        Forms\Components\Repeater::make('empresas')
+                        Repeater::make('empresas')
                             ->relationship()
                             ->schema([
                                 Forms\Components\Select::make('id')
@@ -78,7 +79,7 @@ class UserResource extends Resource
                 Tables\Columns\TextColumn::make('name')
                     ->searchable()
                     ->sortable()
-                    ->weight(FontWeight::Bold),
+                    ->weight(\Filament\Support\Enums\FontWeight::Bold),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('empresas.nombre')
@@ -89,9 +90,7 @@ class UserResource extends Resource
                     ->date('d/m/Y')
                     ->sortable(),
             ])
-            ->filters([
-                //
-            ])
+            ->filters([])
             ->actions([
                 \Filament\Actions\EditAction::make(),
             ])

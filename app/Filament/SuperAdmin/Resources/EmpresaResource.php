@@ -7,8 +7,8 @@ use App\Models\Empresa;
 use BackedEnum;
 use Filament\Forms;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
-use Filament\Support\Enums\FontWeight;
 use Filament\Tables;
 use Filament\Tables\Table;
 
@@ -28,7 +28,7 @@ class EmpresaResource extends Resource
     {
         return $schema
             ->schema([
-                Forms\Components\Section::make('Datos de la Empresa')
+                Section::make('Datos de la Empresa')
                     ->schema([
                         Forms\Components\TextInput::make('nombre')
                             ->required()
@@ -55,7 +55,7 @@ class EmpresaResource extends Resource
                 Tables\Columns\TextColumn::make('nombre')
                     ->searchable()
                     ->sortable()
-                    ->weight(FontWeight::Bold),
+                    ->weight(\Filament\Support\Enums\FontWeight::Bold),
                 Tables\Columns\TextColumn::make('cuit')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
