@@ -8,7 +8,6 @@ use App\Models\User;
 use BackedEnum;
 use Filament\Forms;
 use Filament\Resources\Resource;
-use Filament\Schemas\Components\Repeater;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Tables;
@@ -49,7 +48,7 @@ class UserResource extends Resource
                     ])->columns(2),
                 Section::make('Empresas')
                     ->schema([
-                        Repeater::make('empresas')
+                        Forms\Components\Repeater::make('empresas')
                             ->relationship()
                             ->schema([
                                 Forms\Components\Select::make('id')
