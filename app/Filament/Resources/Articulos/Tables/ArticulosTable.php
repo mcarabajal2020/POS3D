@@ -2,10 +2,10 @@
 
 namespace App\Filament\Resources\Articulos\Tables;
 
-use App\Services\CostoProduccionService;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -19,7 +19,7 @@ class ArticulosTable
                     ->label('SKU')
                     ->searchable()
                     ->sortable()
-                    ->weight(\Filament\Support\Enums\FontWeight::Bold),
+                    ->weight(FontWeight::Bold),
                 TextColumn::make('nombre')
                     ->searchable()
                     ->sortable(),

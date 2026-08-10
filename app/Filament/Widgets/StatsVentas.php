@@ -32,20 +32,20 @@ class StatsVentas extends StatsOverviewWidget
         $cuentaCorriente = (clone $query)->where('tipo_venta', 'cuenta_corriente')->sum('total');
 
         return [
-            Stat::make('Total Ventas', '$ ' . number_format($total, 0, ',', '.'))
-                ->description($cantidad . ' ventas')
+            Stat::make('Total Ventas', '$ '.number_format($total, 0, ',', '.'))
+                ->description($cantidad.' ventas')
                 ->descriptionIcon('heroicon-o-shopping-cart')
                 ->color('primary'),
-            Stat::make('Contado', '$ ' . number_format($contado, 0, ',', '.'))
+            Stat::make('Contado', '$ '.number_format($contado, 0, ',', '.'))
                 ->descriptionIcon('heroicon-o-banknotes')
                 ->color('success'),
-            Stat::make('Transferencias', '$ ' . number_format($transferencia, 0, ',', '.'))
+            Stat::make('Transferencias', '$ '.number_format($transferencia, 0, ',', '.'))
                 ->descriptionIcon('heroicon-o-arrow-path')
                 ->color('info'),
-            Stat::make('Cuenta Corriente', '$ ' . number_format($cuentaCorriente, 0, ',', '.'))
+            Stat::make('Cuenta Corriente', '$ '.number_format($cuentaCorriente, 0, ',', '.'))
                 ->descriptionIcon('heroicon-o-clock')
                 ->color('warning'),
-            Stat::make('Promedio', '$ ' . number_format($promedio, 0, ',', '.'))
+            Stat::make('Promedio', '$ '.number_format($promedio, 0, ',', '.'))
                 ->description('por venta')
                 ->descriptionIcon('heroicon-o-calculator')
                 ->color('gray'),

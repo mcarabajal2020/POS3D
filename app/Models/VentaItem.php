@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Concerns\BelongsToEmpresa;
 use Database\Factories\VentaItemFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,7 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class VentaItem extends Model
 {
     /** @use HasFactory<VentaItemFactory> */
-    use HasFactory;
+    use BelongsToEmpresa, HasFactory;
 
     protected function casts(): array
     {
@@ -35,11 +36,11 @@ class VentaItem extends Model
 
     public function getFormattedPrecioUnitarioAttribute(): string
     {
-        return '$ ' . number_format($this->precio_unitario, 0, ',', '.');
+        return '$ '.number_format($this->precio_unitario, 0, ',', '.');
     }
 
     public function getFormattedSubtotalAttribute(): string
     {
-        return '$ ' . number_format($this->subtotal, 0, ',', '.');
+        return '$ '.number_format($this->subtotal, 0, ',', '.');
     }
 }

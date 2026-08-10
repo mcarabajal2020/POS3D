@@ -3,7 +3,6 @@
 namespace App\Filament\Widgets;
 
 use App\Enums\EstadoVenta;
-use App\Models\Articulo;
 use App\Models\Venta;
 use App\Models\VentaItem;
 use Filament\Widgets\StatsOverviewWidget;

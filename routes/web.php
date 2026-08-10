@@ -2,6 +2,7 @@
 
 use App\Models\Venta;
 use App\Services\ComprobanteService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -17,3 +18,14 @@ Route::get('/comprobante/{venta}/pdf', function (Venta $venta) {
         'Content-Type' => 'application/pdf',
     ]);
 })->name('comprobante.pdf');
+
+Route::post('/empresa/switch', function (Request $request) {
+    $user = auth()->user();
+    $empresaId = $request->input('empresa_id');
+
+    if ($user->empresas()->where('empresa_id', $empresaId)->exists()) {
+        session(['empresa_id' => $empresaId]);
+    }
+
+    return redirect()->back();
+})->middleware('auth')->name('super-admin.empresa.switch');

@@ -25,7 +25,7 @@ class VentaComprobanteMail extends Mailable
         $comprobante = $this->venta->factura_tipo?->label() ?? 'Comprobante';
 
         return new Envelope(
-            subject: "{$comprobante} #{$this->venta->id} - " . config('app.name'),
+            subject: "{$comprobante} #{$this->venta->id} - ".config('app.name'),
         );
     }
 

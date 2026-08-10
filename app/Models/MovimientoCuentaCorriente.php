@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Concerns\BelongsToEmpresa;
 use Database\Factories\MovimientoCuentaCorrienteFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,7 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class MovimientoCuentaCorriente extends Model
 {
     /** @use HasFactory<MovimientoCuentaCorrienteFactory> */
-    use HasFactory;
+    use BelongsToEmpresa, HasFactory;
 
     protected $table = 'movimientos_cuenta_corriente';
 
@@ -35,6 +36,6 @@ class MovimientoCuentaCorriente extends Model
 
     public function getFormattedMontoAttribute(): string
     {
-        return ($this->monto >= 0 ? '+' : '-') . '$ ' . number_format(abs($this->monto), 0, ',', '.');
+        return ($this->monto >= 0 ? '+' : '-').'$ '.number_format(abs($this->monto), 0, ',', '.');
     }
 }

@@ -4,7 +4,6 @@ namespace Database\Factories;
 
 use App\Models\Cliente;
 use App\Models\MovimientoCuentaCorriente;
-use App\Models\Venta;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

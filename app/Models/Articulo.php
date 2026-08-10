@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Concerns\BelongsToEmpresa;
 use App\Services\CostoProduccionService;
 use Database\Factories\ArticuloFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -31,7 +32,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Articulo extends Model
 {
     /** @use HasFactory<ArticuloFactory> */
-    use HasFactory;
+    use BelongsToEmpresa, HasFactory;
 
     protected function casts(): array
     {
@@ -69,11 +70,11 @@ class Articulo extends Model
 
     public function getFormattedPrecioAttribute(): string
     {
-        return '$ ' . number_format($this->precio_venta, 0, ',', '.');
+        return '$ '.number_format($this->precio_venta, 0, ',', '.');
     }
 
     public function getFormattedCostoProduccionAttribute(): string
     {
-        return '$ ' . number_format($this->costoProduccion(), 0, ',', '.');
+        return '$ '.number_format($this->costoProduccion(), 0, ',', '.');
     }
 }

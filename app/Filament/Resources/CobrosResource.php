@@ -3,15 +3,10 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\Cobros\Pages\ManageCobros;
-use App\Models\Cliente;
 use App\Models\Venta;
-use App\Services\CuentaCorrienteService;
 use BackedEnum;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\TextInput;
-use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
+use Filament\Support\Enums\FontWeight;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -41,7 +36,7 @@ class CobrosResource extends Resource
                     ->label('Cliente')
                     ->searchable()
                     ->sortable()
-                    ->weight(\Filament\Support\Enums\FontWeight::Bold),
+                    ->weight(FontWeight::Bold),
                 TextColumn::make('fecha')
                     ->date('d/m/Y')
                     ->sortable(),

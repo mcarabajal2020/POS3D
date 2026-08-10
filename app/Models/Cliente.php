@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Concerns\BelongsToEmpresa;
 use App\Enums\CondicionIva;
 use Database\Factories\ClienteFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -13,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Cliente extends Model
 {
     /** @use HasFactory<ClienteFactory> */
-    use HasFactory;
+    use BelongsToEmpresa, HasFactory;
 
     protected function casts(): array
     {

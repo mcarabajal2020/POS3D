@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Concerns\BelongsToEmpresa;
 use App\Enums\EstadoVenta;
 use App\Enums\TipoComprobante;
 use App\Enums\TipoVenta;
@@ -26,7 +27,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Venta extends Model
 {
     /** @use HasFactory<VentaFactory> */
-    use HasFactory;
+    use BelongsToEmpresa, HasFactory;
 
     protected function casts(): array
     {
@@ -57,11 +58,11 @@ class Venta extends Model
 
     public function getFormattedTotalAttribute(): string
     {
-        return '$ ' . number_format($this->total, 0, ',', '.');
+        return '$ '.number_format($this->total, 0, ',', '.');
     }
 
     public function getFormattedDescuentoAttribute(): string
     {
-        return '$ ' . number_format($this->descuento, 0, ',', '.');
+        return '$ '.number_format($this->descuento, 0, ',', '.');
     }
 }

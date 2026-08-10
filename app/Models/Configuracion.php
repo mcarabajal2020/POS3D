@@ -2,17 +2,20 @@
 
 namespace App\Models;
 
+use App\Concerns\BelongsToEmpresa;
 use Illuminate\Database\Eloquent\Model;
 
 class Configuracion extends Model
 {
+    use BelongsToEmpresa;
+
     protected $table = 'configuraciones';
 
     protected $fillable = ['clave', 'valor', 'texto'];
 
     public static function get(string $clave, int|string|null $default = null): int|string|null
     {
-        $config = static::where('clave', $clave)->first();
+        $config = static::deEmpresa()->where('clave', $clave)->first();
 
         if (! $config) {
             return $default;
@@ -23,12 +26,12 @@ class Configuracion extends Model
 
     public static function setInt(string $clave, int $valor): void
     {
-        static::updateOrCreate(['clave' => $clave], ['valor' => $valor]);
+        static::deEmpresa()->updateOrCreate(['clave' => $clave], ['valor' => $valor]);
     }
 
     public static function setTexto(string $clave, ?string $texto): void
     {
-        static::updateOrCreate(['clave' => $clave], ['texto' => $texto]);
+        static::deEmpresa()->updateOrCreate(['clave' => $clave], ['texto' => $texto]);
     }
 
     public static function set(string $clave, int|string|null $valor): void

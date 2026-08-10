@@ -12,6 +12,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
+use Filament\Support\Enums\FontWeight;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
@@ -40,7 +41,7 @@ class CuentaCorrienteResource extends Resource
                     ->label('Cliente')
                     ->searchable()
                     ->sortable()
-                    ->weight(\Filament\Support\Enums\FontWeight::Bold),
+                    ->weight(FontWeight::Bold),
                 TextColumn::make('tipo')
                     ->label('Tipo')
                     ->badge()
@@ -51,7 +52,7 @@ class CuentaCorrienteResource extends Resource
                     }),
                 TextColumn::make('monto')
                     ->label('Monto')
-                    ->formatStateUsing(fn (int $state): string => ($state >= 0 ? '+' : '-') . '$ ' . number_format(abs($state), 0, ',', '.'))
+                    ->formatStateUsing(fn (int $state): string => ($state >= 0 ? '+' : '-').'$ '.number_format(abs($state), 0, ',', '.'))
                     ->color(fn (int $state): string => $state >= 0 ? 'danger' : 'success'),
                 TextColumn::make('descripcion')
                     ->label('Descripción')
