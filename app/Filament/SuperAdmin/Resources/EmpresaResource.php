@@ -5,9 +5,10 @@ namespace App\Filament\SuperAdmin\Resources;
 use App\Filament\SuperAdmin\Resources\EmpresaResource\Pages;
 use App\Models\Empresa;
 use BackedEnum;
-use Filament\Forms;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
-use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -28,23 +29,22 @@ class EmpresaResource extends Resource
     {
         return $schema
             ->schema([
-                Section::make('Datos de la Empresa')
-                    ->schema([
-                        Forms\Components\TextInput::make('nombre')
-                            ->required()
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('cuit')
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('email')
-                            ->email()
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('telefono')
-                            ->maxLength(255),
-                        Forms\Components\Textarea::make('direccion')
-                            ->rows(3),
-                        Forms\Components\Toggle::make('activa')
-                            ->default(true),
-                    ])->columns(2),
+                TextInput::make('nombre')
+                    ->required()
+                    ->maxLength(255)
+                    ->columnSpanFull(),
+                TextInput::make('cuit')
+                    ->maxLength(255),
+                TextInput::make('email')
+                    ->email()
+                    ->maxLength(255),
+                TextInput::make('telefono')
+                    ->maxLength(255),
+                Textarea::make('direccion')
+                    ->rows(3)
+                    ->columnSpanFull(),
+                Toggle::make('activa')
+                    ->default(true),
             ]);
     }
 

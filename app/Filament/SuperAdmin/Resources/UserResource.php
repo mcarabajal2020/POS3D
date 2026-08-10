@@ -6,9 +6,10 @@ use App\Filament\SuperAdmin\Resources\UserResource\Pages;
 use App\Models\Empresa;
 use App\Models\User;
 use BackedEnum;
-use Filament\Forms;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
-use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -29,45 +30,41 @@ class UserResource extends Resource
     {
         return $schema
             ->schema([
-                Section::make('Datos del Usuario')
+                TextInput::make('name')
+                    ->required()
+                    ->maxLength(255),
+                TextInput::make('email')
+                    ->email()
+                    ->required()
+                    ->maxLength(255)
+                    ->unique(ignoreRecord: true),
+                TextInput::make('password')
+                    ->password()
+                    ->dehydrateStateUsing(fn (string $state): string => filled($state) ? bcrypt($state) : $state)
+                    ->dehydrated(fn (?string $state): bool => filled($state))
+                    ->required(fn (string $operation): bool => $operation === 'create')
+                    ->maxLength(255)
+                    ->columnSpanFull(),
+                Repeater::make('empresas')
+                    ->relationship()
                     ->schema([
-                        Forms\Components\TextInput::make('name')
+                        Select::make('id')
+                            ->label('Empresa')
+                            ->options(Empresa::where('activa', true)->pluck('nombre', 'id'))
                             ->required()
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('email')
-                            ->email()
-                            ->required()
-                            ->maxLength(255)
-                            ->unique(ignoreRecord: true),
-                        Forms\Components\TextInput::make('password')
-                            ->password()
-                            ->dehydrateStateUsing(fn (string $state): string => filled($state) ? bcrypt($state) : $state)
-                            ->dehydrated(fn (?string $state): bool => filled($state))
-                            ->required(fn (string $operation): bool => $operation === 'create')
-                            ->maxLength(255),
-                    ])->columns(2),
-                Section::make('Empresas')
-                    ->schema([
-                        Forms\Components\Repeater::make('empresas')
-                            ->relationship()
-                            ->schema([
-                                Forms\Components\Select::make('id')
-                                    ->label('Empresa')
-                                    ->options(Empresa::where('activa', true)->pluck('nombre', 'id'))
-                                    ->required()
-                                    ->searchable(),
-                                Forms\Components\Select::make('pivot_role')
-                                    ->label('Rol')
-                                    ->options([
-                                        'admin' => 'Admin',
-                                        'vendedor' => 'Vendedor',
-                                        'cajero' => 'Cajero',
-                                    ])
-                                    ->required(),
+                            ->searchable(),
+                        Select::make('pivot_role')
+                            ->label('Rol')
+                            ->options([
+                                'admin' => 'Admin',
+                                'vendedor' => 'Vendedor',
+                                'cajero' => 'Cajero',
                             ])
-                            ->columns(2)
-                            ->defaultItems(1),
-                    ]),
+                            ->required(),
+                    ])
+                    ->columns(2)
+                    ->defaultItems(1)
+                    ->columnSpanFull(),
             ]);
     }
 
