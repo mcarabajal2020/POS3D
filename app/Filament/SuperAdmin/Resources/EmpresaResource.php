@@ -28,11 +28,10 @@ class EmpresaResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema
-            ->schema([
+            ->components([
                 TextInput::make('nombre')
                     ->required()
-                    ->maxLength(255)
-                    ->columnSpanFull(),
+                    ->maxLength(255),
                 TextInput::make('cuit')
                     ->maxLength(255),
                 TextInput::make('email')
@@ -41,8 +40,7 @@ class EmpresaResource extends Resource
                 TextInput::make('telefono')
                     ->maxLength(255),
                 Textarea::make('direccion')
-                    ->rows(3)
-                    ->columnSpanFull(),
+                    ->rows(3),
                 Toggle::make('activa')
                     ->default(true),
             ]);

@@ -29,7 +29,7 @@ class UserResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema
-            ->schema([
+            ->components([
                 TextInput::make('name')
                     ->required()
                     ->maxLength(255),
@@ -43,8 +43,7 @@ class UserResource extends Resource
                     ->dehydrateStateUsing(fn (string $state): string => filled($state) ? bcrypt($state) : $state)
                     ->dehydrated(fn (?string $state): bool => filled($state))
                     ->required(fn (string $operation): bool => $operation === 'create')
-                    ->maxLength(255)
-                    ->columnSpanFull(),
+                    ->maxLength(255),
                 Repeater::make('empresas')
                     ->relationship()
                     ->schema([
@@ -63,8 +62,7 @@ class UserResource extends Resource
                             ->required(),
                     ])
                     ->columns(2)
-                    ->defaultItems(1)
-                    ->columnSpanFull(),
+                    ->defaultItems(1),
             ]);
     }
 
