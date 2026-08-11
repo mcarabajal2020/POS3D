@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\ApplyEmpresaMailConfig;
 use App\Http\Middleware\ResolveEmpresa;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -15,6 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->web(append: [
             ResolveEmpresa::class,
+            ApplyEmpresaMailConfig::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

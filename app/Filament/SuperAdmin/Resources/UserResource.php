@@ -6,11 +6,15 @@ use App\Filament\SuperAdmin\Resources\UserResource\Pages;
 use App\Models\Empresa;
 use App\Models\User;
 use BackedEnum;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
+use Filament\Support\Enums\FontWeight;
 use Filament\Tables;
 use Filament\Tables\Table;
 
@@ -44,15 +48,15 @@ class UserResource extends Resource
                     ->dehydrated(fn (?string $state): bool => filled($state))
                     ->required(fn (string $operation): bool => $operation === 'create')
                     ->maxLength(255),
-                Repeater::make('empresas')
+                Repeater::make('userEmpresas')
                     ->relationship()
                     ->schema([
-                        Select::make('id')
+                        Select::make('empresa_id')
                             ->label('Empresa')
                             ->options(Empresa::where('activa', true)->pluck('nombre', 'id'))
                             ->required()
                             ->searchable(),
-                        Select::make('pivot_role')
+                        Select::make('role')
                             ->label('Rol')
                             ->options([
                                 'admin' => 'Admin',
@@ -73,7 +77,7 @@ class UserResource extends Resource
                 Tables\Columns\TextColumn::make('name')
                     ->searchable()
                     ->sortable()
-                    ->weight(\Filament\Support\Enums\FontWeight::Bold),
+                    ->weight(FontWeight::Bold),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('empresas.nombre')
@@ -86,11 +90,11 @@ class UserResource extends Resource
             ])
             ->filters([])
             ->actions([
-                \Filament\Actions\EditAction::make(),
+                EditAction::make(),
             ])
             ->bulkActions([
-                \Filament\Actions\BulkActionGroup::make([
-                    \Filament\Actions\DeleteBulkAction::make(),
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }

@@ -18,7 +18,7 @@ class ConteoPorEstado extends StatsOverviewWidget
 
     protected function getStats(): array
     {
-        $query = Venta::query();
+        $query = Venta::query()->deEmpresa();
 
         if ($this->filtroEstado) {
             $query->where('estado', $this->filtroEstado);
@@ -31,7 +31,7 @@ class ConteoPorEstado extends StatsOverviewWidget
 
         $pendientesImpresion = VentaItem::query()
             ->whereHas('venta', function ($q) {
-                $q->whereIn('estado', [EstadoVenta::Pendiente, EstadoVenta::EnProduccion]);
+                $q->deEmpresa()->whereIn('estado', [EstadoVenta::Pendiente, EstadoVenta::EnProduccion]);
             })
             ->sum('cantidad');
 

@@ -17,6 +17,7 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use UnitEnum;
 
 class CuentaCorrienteResource extends Resource
@@ -69,7 +70,7 @@ class CuentaCorrienteResource extends Resource
             ->filters([
                 SelectFilter::make('cliente_id')
                     ->label('Cliente')
-                    ->options(Cliente::pluck('nombre', 'id'))
+                    ->options(Cliente::deEmpresa()->pluck('nombre', 'id'))
                     ->searchable()
                     ->preload(),
                 SelectFilter::make('tipo')
@@ -86,7 +87,7 @@ class CuentaCorrienteResource extends Resource
                     ->form([
                         Select::make('cliente_id')
                             ->label('Cliente')
-                            ->options(Cliente::pluck('nombre', 'id'))
+                            ->options(Cliente::deEmpresa()->pluck('nombre', 'id'))
                             ->searchable()
                             ->preload()
                             ->required(),
@@ -101,13 +102,18 @@ class CuentaCorrienteResource extends Resource
                             ->default('Pago recibido'),
                     ])
                     ->action(function (array $data): void {
-                        $cliente = Cliente::findOrFail($data['cliente_id']);
+                        $cliente = Cliente::deEmpresa()->findOrFail($data['cliente_id']);
                         app(CuentaCorrienteService::class)
                             ->registrarPago($cliente, $data['monto'], $data['descripcion']);
                     })
                     ->successNotificationTitle('Pago registrado'),
             ])
             ->defaultSort('created_at', 'desc');
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->deEmpresa();
     }
 
     public static function getPages(): array

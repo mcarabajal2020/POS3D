@@ -25,7 +25,7 @@ class ListVentas extends ListRecords
 
     public function descargarPdfCompartir(int $ventaId): StreamedResponse
     {
-        $venta = Venta::findOrFail($ventaId);
+        $venta = Venta::deEmpresa()->findOrFail($ventaId);
         $pdf = app(ComprobanteService::class)->generarPdf($venta);
 
         return response()->streamDownload(function () use ($pdf): void {
@@ -37,7 +37,7 @@ class ListVentas extends ListRecords
 
     public function enviarEmailCompartir(int $ventaId): void
     {
-        $venta = Venta::findOrFail($ventaId);
+        $venta = Venta::deEmpresa()->findOrFail($ventaId);
 
         if (empty($venta->cliente->email)) {
             Notification::make()

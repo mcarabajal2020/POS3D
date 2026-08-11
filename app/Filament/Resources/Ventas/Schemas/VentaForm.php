@@ -25,7 +25,7 @@ class VentaForm
                     ->schema([
                         Select::make('cliente_id')
                             ->label('Cliente')
-                            ->options(Cliente::pluck('nombre', 'id'))
+                            ->options(Cliente::deEmpresa()->pluck('nombre', 'id'))
                             ->searchable()
                             ->preload()
                             ->required(),
@@ -58,14 +58,14 @@ class VentaForm
                             ->schema([
                                 Select::make('articulo_id')
                                     ->label('Artículo')
-                                    ->options(Articulo::pluck('nombre', 'id'))
+                                    ->options(Articulo::deEmpresa()->pluck('nombre', 'id'))
                                     ->searchable()
                                     ->preload()
                                     ->required()
                                     ->reactive()
                                     ->afterStateUpdated(function ($set, $state) {
                                         if ($state) {
-                                            $articulo = Articulo::find($state);
+                                            $articulo = Articulo::deEmpresa()->find($state);
                                             if ($articulo) {
                                                 $set('precio_unitario', $articulo->precio_venta);
                                             }

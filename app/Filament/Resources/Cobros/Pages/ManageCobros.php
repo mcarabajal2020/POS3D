@@ -44,7 +44,7 @@ class ManageCobros extends Page
                     ->schema([
                         Select::make('cliente_id')
                             ->label('Cliente')
-                            ->options(Cliente::pluck('nombre', 'id'))
+                            ->options(Cliente::deEmpresa()->pluck('nombre', 'id'))
                             ->searchable()
                             ->preload()
                             ->required()
@@ -73,7 +73,7 @@ class ManageCobros extends Page
                                     return [];
                                 }
 
-                                return Venta::where('cliente_id', $clienteId)
+                                return Venta::deEmpresa()->where('cliente_id', $clienteId)
                                     ->where('tipo_venta', 'cuenta_corriente')
                                     ->where('total', '>', 0)
                                     ->get()
@@ -93,7 +93,7 @@ class ManageCobros extends Page
     {
         $data = $this->form->getState();
 
-        $cliente = Cliente::findOrFail($data['cliente_id']);
+        $cliente = Cliente::deEmpresa()->findOrFail($data['cliente_id']);
         $monto = (int) $data['monto'];
 
         if ($data['metodo_pago'] === 'mercado_pago') {

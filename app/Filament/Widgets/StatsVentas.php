@@ -17,7 +17,7 @@ class StatsVentas extends StatsOverviewWidget
 
     protected function getStats(): array
     {
-        $query = Venta::query()->where('estado', '!=', EstadoVenta::Terminado);
+        $query = Venta::query()->deEmpresa()->where('estado', '!=', EstadoVenta::Terminado);
 
         if ($this->filtroEstado) {
             $query->where('estado', $this->filtroEstado);

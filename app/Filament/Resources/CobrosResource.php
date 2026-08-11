@@ -10,6 +10,7 @@ use Filament\Support\Enums\FontWeight;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use UnitEnum;
 
 class CobrosResource extends Resource
@@ -69,6 +70,11 @@ class CobrosResource extends Resource
                     ->sortable(),
             ])
             ->defaultSort('created_at', 'desc');
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->deEmpresa();
     }
 
     public static function getPages(): array

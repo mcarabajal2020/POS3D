@@ -44,10 +44,15 @@
         <table class="header-table">
             <tr>
                 <td style="vertical-align: top;">
-                    <div class="company-name">{{ config('app.name') }}</div>
+                    <div class="company-name">{{ $venta->empresa->nombre ?? config('app.name') }}</div>
                     <div class="company-info">
-                        Impresión 3D y Prototipado<br>
-                        Buenos Aires, Argentina
+                        {{ $venta->empresa->direccion ?? 'Buenos Aires, Argentina' }}<br>
+                        @if($venta->empresa->email)
+                            {{ $venta->empresa->email }}<br>
+                        @endif
+                        @if($venta->empresa->telefono)
+                            Tel: {{ $venta->empresa->telefono }}
+                        @endif
                     </div>
                 </td>
                 <td class="invoice-title" style="vertical-align: top;">
@@ -142,7 +147,7 @@
 
         <div class="footer">
             <p>Gracias por su compra</p>
-            <p>Documento generado automáticamente por {{ config('app.name') }}</p>
+            <p>Documento generado automáticamente por {{ $venta->empresa->nombre ?? config('app.name') }}</p>
         </div>
     </div>
 </body>
