@@ -15,7 +15,7 @@ class ArticuloForm
 {
     public static function siguienteSku(): string
     {
-        $ultimoSku = Articulo::deEmpresa()->query()
+        $ultimoSku = Articulo::deEmpresa()
             ->where('codigo_sku', 'like', 'SKU-%')
             ->orderByRaw('CAST(SUBSTR(codigo_sku, 5) AS INTEGER) DESC')
             ->value('codigo_sku');
