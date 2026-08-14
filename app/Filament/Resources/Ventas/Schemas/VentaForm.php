@@ -22,8 +22,7 @@ class VentaForm
             ->columns(1)
             ->components([
                 Section::make('Datos de la Venta')
-                    ->columns(2)
-                    ->columnSpanFull()
+                    ->columns(1)
                     ->schema([
                         Select::make('cliente_id')
                             ->label('Cliente')
@@ -54,7 +53,6 @@ class VentaForm
                             ->prefix('$'),
                     ]),
                 Section::make('Ítems de la Venta')
-                    ->columnSpanFull()
                     ->schema([
                         Repeater::make('items')
                             ->relationship()
@@ -108,8 +106,7 @@ class VentaForm
                             ->defaultItems(1),
                     ]),
                 Section::make('Facturación')
-                    ->columns(2)
-                    ->columnSpanFull()
+                    ->columns(1)
                     ->schema([
                         Select::make('factura_tipo')
                             ->label('Tipo de comprobante')
