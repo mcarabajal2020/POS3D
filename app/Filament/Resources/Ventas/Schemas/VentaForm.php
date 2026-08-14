@@ -19,6 +19,7 @@ class VentaForm
     public static function configure(Schema $schema): Schema
     {
         return $schema
+            ->columns(1)
             ->components([
                 Section::make('Datos de la Venta')
                     ->columns(2)
