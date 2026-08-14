@@ -11,6 +11,7 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
@@ -22,35 +23,41 @@ class VentaForm
             ->columns(1)
             ->components([
                 Section::make('Datos de la Venta')
-                    ->columns(1)
                     ->schema([
                         Select::make('cliente_id')
                             ->label('Cliente')
                             ->options(Cliente::deEmpresa()->pluck('nombre', 'id'))
                             ->searchable()
                             ->preload()
-                            ->required(),
-                        DatePicker::make('fecha')
-                            ->label('Fecha')
-                            ->default(now())
-                            ->required(),
-                        Select::make('estado')
-                            ->label('Estado')
-                            ->options(EstadoVenta::class)
                             ->required()
-                            ->native(false),
-                        Select::make('tipo_venta')
-                            ->label('Tipo de venta')
-                            ->options(TipoVenta::class)
-                            ->required()
-                            ->native(false)
-                            ->default(TipoVenta::Contado),
-                        TextInput::make('descuento')
-                            ->label('Descuento ($)')
-                            ->numeric()
-                            ->minValue(0)
-                            ->default(0)
-                            ->prefix('$'),
+                            ->columnSpanFull(),
+                        Grid::make(3)
+                            ->schema([
+                                DatePicker::make('fecha')
+                                    ->label('Fecha')
+                                    ->default(now())
+                                    ->required(),
+                                Select::make('estado')
+                                    ->label('Estado')
+                                    ->options(EstadoVenta::class)
+                                    ->required()
+                                    ->native(false),
+                                Select::make('tipo_venta')
+                                    ->label('Tipo de venta')
+                                    ->options(TipoVenta::class)
+                                    ->required()
+                                    ->native(false)
+                                    ->default(TipoVenta::Contado),
+                            ]),
+                        Grid::make(3)
+                            ->schema([
+                                TextInput::make('descuento')
+                                    ->label('Descuento ($)')
+                                    ->numeric()
+                                    ->minValue(0)
+                                    ->default(0)
+                                    ->prefix('$'),
+                            ]),
                     ]),
                 Section::make('Ítems de la Venta')
                     ->schema([
