@@ -3,8 +3,8 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\VentaResource\Pages\CreateVenta;
-use App\Filament\Resources\VentaResource\Pages\EditVenta;
 use App\Filament\Resources\VentaResource\Pages\ListVentas;
+use App\Filament\Resources\VentaResource\Pages\ViewVenta;
 use App\Filament\Resources\Ventas\Schemas\VentaForm;
 use App\Filament\Resources\Ventas\Tables\VentasTable;
 use App\Models\Venta;
@@ -52,7 +52,7 @@ class VentaResource extends Resource
         return [
             'index' => ListVentas::route('/'),
             'create' => CreateVenta::route('/create'),
-            'edit' => EditVenta::route('/{record}/edit'),
+            'view' => ViewVenta::route('/{record}'),
         ];
     }
 }

@@ -6,9 +6,7 @@ use App\Enums\EstadoVenta;
 use App\Enums\TipoComprobante;
 use App\Enums\TipoVenta;
 use Filament\Actions\Action;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
@@ -86,7 +84,7 @@ class VentasTable
                     ->options(TipoVenta::class),
             ])
             ->recordActions([
-                EditAction::make(),
+                ViewAction::make(),
                 Action::make('compartir')
                     ->label('Compartir')
                     ->icon('heroicon-o-share')
@@ -99,9 +97,6 @@ class VentasTable
                     ])),
             ])
             ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
             ]);
     }
 }
