@@ -9,6 +9,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
 
 class ClientesTable
@@ -52,7 +53,12 @@ class ClientesTable
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->filters([])
+            ->filters([
+                Filter::make('con_deuda')
+                    ->label('Con deuda')
+                    ->query(fn ($query) => $query->where('saldo', '>', 0))
+                    ->toggle(),
+            ])
             ->recordActions([
                 EditAction::make(),
                 Action::make('historial')
