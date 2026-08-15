@@ -22,13 +22,24 @@ return new class extends Migration
             DB::table($table)->whereNull('empresa_id')->update(['empresa_id' => $empresa->id]);
         }
 
-        DB::table('user_empresa')->insert([
-            'user_id' => 1,
-            'empresa_id' => $empresa->id,
-            'role' => 'admin',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        $userExists = DB::table('users')->where('id', 1)->exists();
+
+        if ($userExists) {
+            $alreadyAttached = DB::table('user_empresa')
+                ->where('user_id', 1)
+                ->where('empresa_id', $empresa->id)
+                ->exists();
+
+            if (! $alreadyAttached) {
+                DB::table('user_empresa')->insert([
+                    'user_id' => 1,
+                    'empresa_id' => $empresa->id,
+                    'role' => 'admin',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+        }
     }
 
     public function down(): void

@@ -64,14 +64,14 @@ class VentaService
     public function puedeTransicionar(Venta $venta, EstadoVenta $nuevoEstado): bool
     {
         $transiciones = [
-            EstadoVenta::Presupuesto => [EstadoVenta::Pendiente, EstadoVenta::Facturado],
-            EstadoVenta::Pendiente => [EstadoVenta::EnProduccion, EstadoVenta::Facturado],
-            EstadoVenta::EnProduccion => [EstadoVenta::Terminado],
-            EstadoVenta::Terminado => [EstadoVenta::Entregado],
-            EstadoVenta::Entregado => [EstadoVenta::Facturado],
-            EstadoVenta::Facturado => [],
+            EstadoVenta::Presupuesto->value => [EstadoVenta::Pendiente, EstadoVenta::Facturado],
+            EstadoVenta::Pendiente->value => [EstadoVenta::EnProduccion, EstadoVenta::Facturado],
+            EstadoVenta::EnProduccion->value => [EstadoVenta::Terminado],
+            EstadoVenta::Terminado->value => [EstadoVenta::Entregado],
+            EstadoVenta::Entregado->value => [EstadoVenta::Facturado],
+            EstadoVenta::Facturado->value => [],
         ];
 
-        return in_array($nuevoEstado, $transiciones[$venta->estado] ?? []);
+        return in_array($nuevoEstado, $transiciones[$venta->estado->value] ?? []);
     }
 }

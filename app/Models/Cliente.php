@@ -9,12 +9,22 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 #[Fillable(['nombre', 'cuit_cuil', 'direccion', 'telefono', 'email', 'condicion_iva', 'saldo'])]
 class Cliente extends Model
 {
     /** @use HasFactory<ClienteFactory> */
-    use BelongsToEmpresa, HasFactory;
+    use BelongsToEmpresa, HasFactory, LogsActivity;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['nombre', 'cuit_cuil', 'saldo', 'condicion_iva'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
 
     protected function casts(): array
     {

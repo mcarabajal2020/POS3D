@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 #[Fillable([
     'codigo_sku',
@@ -32,7 +34,15 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Articulo extends Model
 {
     /** @use HasFactory<ArticuloFactory> */
-    use BelongsToEmpresa, HasFactory;
+    use BelongsToEmpresa, HasFactory, LogsActivity;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['nombre', 'precio_venta', 'stock', 'codigo_sku'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
 
     protected function casts(): array
     {

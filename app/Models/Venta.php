@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 #[Fillable([
     'cliente_id',
@@ -27,7 +29,15 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Venta extends Model
 {
     /** @use HasFactory<VentaFactory> */
-    use BelongsToEmpresa, HasFactory;
+    use BelongsToEmpresa, HasFactory, LogsActivity;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['estado', 'total', 'descuento', 'tipo_venta'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
 
     protected function casts(): array
     {
