@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Concerns\BelongsToEmpresa;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Crypt;
 
 class Configuracion extends Model
 {
@@ -13,6 +14,11 @@ class Configuracion extends Model
 
     protected $fillable = ['clave', 'valor', 'texto'];
 
+    private const ENCRYPTED_KEYS = [
+        'mail_password',
+        'mail_username',
+    ];
+
     public static function get(string $clave, int|string|null $default = null): int|string|null
     {
         $config = static::deEmpresa()->where('clave', $clave)->first();
@@ -21,7 +27,13 @@ class Configuracion extends Model
             return $default;
         }
 
-        return $config->texto ?? $config->valor ?? $default;
+        $value = $config->texto ?? $config->valor ?? $default;
+
+        if (in_array($clave, self::ENCRYPTED_KEYS) && $value !== null) {
+            return self::decryptValue($value);
+        }
+
+        return $value;
     }
 
     public static function setInt(string $clave, int $valor): void
@@ -31,6 +43,10 @@ class Configuracion extends Model
 
     public static function setTexto(string $clave, ?string $texto): void
     {
+        if (in_array($clave, self::ENCRYPTED_KEYS) && $texto !== null) {
+            $texto = self::encryptValue($texto);
+        }
+
         static::deEmpresa()->updateOrCreate(['clave' => $clave], ['texto' => $texto]);
     }
 
@@ -41,5 +57,28 @@ class Configuracion extends Model
         } else {
             static::setTexto($clave, $valor);
         }
+    }
+
+    private static function encryptValue(string $value): string
+    {
+        if (self::isEncrypted($value)) {
+            return $value;
+        }
+
+        return Crypt::encryptString($value);
+    }
+
+    private static function decryptValue(string $value): string
+    {
+        if (! self::isEncrypted($value)) {
+            return $value;
+        }
+
+        return Crypt::decryptString($value);
+    }
+
+    private static function isEncrypted(string $value): bool
+    {
+        return str_starts_with($value, 'eyJ');
     }
 }

@@ -28,7 +28,7 @@ trait BelongsToEmpresa
         $empresaId = $empresaId ?? session('empresa_id');
 
         if (is_null($empresaId)) {
-            return $query;
+            throw new \RuntimeException('Empresa no identificada. Por favor, seleccione una empresa.');
         }
 
         return $query->where('empresa_id', $empresaId);

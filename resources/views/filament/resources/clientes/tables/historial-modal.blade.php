@@ -40,7 +40,7 @@
                 @foreach($allRecords as $item)
                     @php
                         $ventaUrl = $item['venta_id']
-                            ? \App\Filament\Resources\VentaResource::getUrl('edit', ['record' => $item['venta_id']])
+                            ? \App\Filament\Resources\VentaResource::getUrl('view', ['record' => $item['venta_id']])
                             : null;
                     @endphp
                     <tr class="border-b border-gray-100 dark:border-gray-800">

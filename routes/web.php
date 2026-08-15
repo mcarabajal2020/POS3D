@@ -10,6 +10,12 @@ Route::get('/', function () {
 });
 
 Route::get('/comprobante/{venta}/pdf', function (Venta $venta) {
+    if (auth()->guest()) {
+        abort(403);
+    }
+
+    $venta = Venta::deEmpresa()->findOrFail($venta->id);
+
     $pdf = app(ComprobanteService::class)->generarPdf($venta);
 
     return response()->streamDownload(function () use ($pdf): void {
@@ -17,7 +23,7 @@ Route::get('/comprobante/{venta}/pdf', function (Venta $venta) {
     }, "comprobante_venta_{$venta->id}.pdf", [
         'Content-Type' => 'application/pdf',
     ]);
-})->name('comprobante.pdf');
+})->middleware(['auth', 'throttle:pdf'])->name('comprobante.pdf');
 
 Route::post('/empresa/switch', function (Request $request) {
     $user = auth()->user();
@@ -28,4 +34,4 @@ Route::post('/empresa/switch', function (Request $request) {
     }
 
     return redirect()->back();
-})->middleware('auth')->name('super-admin.empresa.switch');
+})->middleware(['auth', 'throttle:empresa-switch'])->name('super-admin.empresa.switch');

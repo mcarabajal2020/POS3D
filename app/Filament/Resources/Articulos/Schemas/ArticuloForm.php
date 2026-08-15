@@ -39,7 +39,10 @@ class ArticuloForm
                         TextInput::make('codigo_sku')
                             ->label('Código/SKU')
                             ->required()
-                            ->unique(ignoreRecord: true)
+                            ->scopedUnique(
+                                ignoreRecord: true,
+                                modifyQueryUsing: fn ($query) => $query->deEmpresa(),
+                            )
                             ->maxLength(255)
                             ->default(fn () => self::siguienteSku()),
                         TextInput::make('nombre')
