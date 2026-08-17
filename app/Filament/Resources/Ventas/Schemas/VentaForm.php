@@ -71,11 +71,13 @@ class VentaForm
                                     ->preload()
                                     ->required()
                                     ->reactive()
-                                    ->afterStateUpdated(function ($set, $state) {
+                                    ->afterStateUpdated(function ($set, $get, $state) {
                                         if ($state) {
                                             $articulo = Articulo::deEmpresa()->find($state);
                                             if ($articulo) {
                                                 $set('precio_unitario', $articulo->precio_venta);
+                                                $cantidad = $get('cantidad') ?? 1;
+                                                $set('subtotal', $articulo->precio_venta * $cantidad);
                                             }
                                         }
                                     }),

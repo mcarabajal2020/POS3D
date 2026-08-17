@@ -15,6 +15,17 @@ class VentaItem extends Model
     /** @use HasFactory<VentaItemFactory> */
     use BelongsToEmpresa, HasFactory;
 
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::creating(function (VentaItem $item) {
+            if (is_null($item->subtotal) && $item->cantidad && $item->precio_unitario) {
+                $item->subtotal = $item->cantidad * $item->precio_unitario;
+            }
+        });
+    }
+
     protected function casts(): array
     {
         return [
