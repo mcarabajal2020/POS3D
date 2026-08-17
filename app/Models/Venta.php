@@ -36,7 +36,7 @@ class Venta extends Model
         return LogOptions::defaults()
             ->logOnly(['estado', 'total', 'descuento', 'tipo_venta'])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
+            ->dontLogEmptyChanges();
     }
 
     protected function casts(): array

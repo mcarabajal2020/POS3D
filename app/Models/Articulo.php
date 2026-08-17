@@ -41,7 +41,7 @@ class Articulo extends Model
         return LogOptions::defaults()
             ->logOnly(['nombre', 'precio_venta', 'stock', 'codigo_sku'])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
+            ->dontLogEmptyChanges();
     }
 
     protected function casts(): array

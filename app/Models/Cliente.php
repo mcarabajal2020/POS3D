@@ -23,7 +23,7 @@ class Cliente extends Model
         return LogOptions::defaults()
             ->logOnly(['nombre', 'cuit_cuil', 'saldo', 'condicion_iva'])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
+            ->dontLogEmptyChanges();
     }
 
     protected function casts(): array
