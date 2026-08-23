@@ -3,13 +3,12 @@
 namespace App\Services;
 
 use App\Models\Articulo;
-use App\Models\Configuracion;
 
 class CostoProduccionService
 {
     public function calcular(Articulo $articulo): array
     {
-        $costoFilamentoKg = Configuracion::get('costo_filamento_kg', 25000);
+        $costoFilamentoKg = $articulo->filamento->precio_kg ?? 25000;
         $costoMaterial = (int) round(($articulo->filamento_gramos * $costoFilamentoKg) / 1000);
 
         $tiempoTotalHoras = $articulo->horas_impresion + ($articulo->tiempo_minutos / 60);

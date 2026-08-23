@@ -3,7 +3,8 @@
 namespace App\Filament\Resources\Articulos\Schemas;
 
 use App\Models\Articulo;
-use App\Models\Configuracion;
+use App\Models\Filamento;
+use App\Models\Impresora;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -29,8 +30,6 @@ class ArticuloForm
 
     public static function configure(Schema $schema): Schema
     {
-        $costoFilamentoKg = Configuracion::get('costo_filamento_kg', 25000);
-
         return $schema
             ->components([
                 Section::make('Datos Generales')
@@ -56,6 +55,28 @@ class ArticuloForm
                 Section::make('Material')
                     ->columns(2)
                     ->schema([
+                        Select::make('filamento_id')
+                            ->label('Filamento')
+                            ->options(Filamento::deEmpresa()->pluck('nombre', 'id'))
+                            ->searchable()
+                            ->preload()
+                            ->required()
+                            ->live()
+                            ->afterStateUpdated(function ($set, $state) {
+                                if ($state) {
+                                    $filamento = Filamento::deEmpresa()->find($state);
+                                    if ($filamento) {
+                                        $set('costo_filamento_kg', $filamento->precio_kg);
+                                    }
+                                }
+                            }),
+                        TextInput::make('costo_filamento_kg')
+                            ->label('Costo filamento/kg')
+                            ->numeric()
+                            ->disabled()
+                            ->dehydrated()
+                            ->prefix('$')
+                            ->suffix('/ kg'),
                         Select::make('tipo_material')
                             ->label('Tipo de material')
                             ->options([
@@ -97,26 +118,20 @@ class ArticuloForm
                 Section::make('Máquina y Energía')
                     ->columns(3)
                     ->schema([
-                        Select::make('guia_modelo')
-                            ->label('Guía rápida por modelo (Auto-completar)')
-                            ->options([
-                                'a1' => 'A1 (120W | Desgaste: $120/h)',
-                                'a1_mini' => 'A1 Mini (100W | Desgaste: $80/h)',
-                                'p1s' => 'P1S (120W | Desgaste: $150/h)',
-                                'x1c' => 'X1C (120W | Desgaste: $200/h)',
-                            ])
-                            ->reactive()
+                        Select::make('impresora_id')
+                            ->label('Impresora')
+                            ->options(Impresora::deEmpresa()->pluck('nombre', 'id'))
+                            ->searchable()
+                            ->preload()
+                            ->required()
+                            ->live()
                             ->afterStateUpdated(function ($set, $state) {
-                                $config = match ($state) {
-                                    'a1' => ['consumo_watts' => 120, 'desgaste_maquina' => 120],
-                                    'a1_mini' => ['consumo_watts' => 100, 'desgaste_maquina' => 80],
-                                    'p1s' => ['consumo_watts' => 120, 'desgaste_maquina' => 150],
-                                    'x1c' => ['consumo_watts' => 120, 'desgaste_maquina' => 200],
-                                    default => null,
-                                };
-                                if ($config) {
-                                    $set('consumo_watts', $config['consumo_watts']);
-                                    $set('desgaste_maquina', $config['desgaste_maquina']);
+                                if ($state) {
+                                    $impresora = Impresora::deEmpresa()->find($state);
+                                    if ($impresora) {
+                                        $set('consumo_watts', $impresora->consumo_watts);
+                                        $set('desgaste_maquina', $impresora->desgaste_hora);
+                                    }
                                 }
                             }),
                         TextInput::make('consumo_watts')

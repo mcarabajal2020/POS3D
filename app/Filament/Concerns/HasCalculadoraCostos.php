@@ -2,7 +2,7 @@
 
 namespace App\Filament\Concerns;
 
-use App\Models\Configuracion;
+use App\Models\Filamento;
 
 trait HasCalculadoraCostos
 {
@@ -12,7 +12,9 @@ trait HasCalculadoraCostos
     {
         $data = $this->data ?? [];
 
-        $costoFilamentoKg = Configuracion::get('costo_filamento_kg', 25000);
+        $filamentoId = $data['filamento_id'] ?? null;
+        $filamento = $filamentoId ? Filamento::deEmpresa()->find($filamentoId) : null;
+        $costoFilamentoKg = $filamento?->precio_kg ?? 25000;
         $gramos = (float) ($data['filamento_gramos'] ?? 0);
         $horas = (float) ($data['horas_impresion'] ?? 0);
         $minutos = (float) ($data['tiempo_minutos'] ?? 0);

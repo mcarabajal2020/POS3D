@@ -32,7 +32,6 @@ class ConfiguracionPage extends Page
     public function mount(): void
     {
         $this->form->fill([
-            'costo_filamento_kg' => Configuracion::get('costo_filamento_kg', 25000),
             'mail_mailer' => Configuracion::get('mail_mailer', 'smtp'),
             'mail_host' => Configuracion::get('mail_host', 'smtp.gmail.com'),
             'mail_port' => Configuracion::get('mail_port', '587'),
@@ -49,18 +48,6 @@ class ConfiguracionPage extends Page
         return $schema
             ->statePath('data')
             ->components([
-                Section::make('Costo del Filamento')
-                    ->description('Precio de referencia para el cálculo de costos de producción')
-                    ->schema([
-                        TextInput::make('costo_filamento_kg')
-                            ->label('Costo del filamento por kg')
-                            ->required()
-                            ->numeric()
-                            ->minValue(0)
-                            ->prefix('$')
-                            ->suffix('/ kg'),
-                    ]),
-
                 Section::make('Configuración de Correo')
                     ->description('Datos del servidor SMTP para envío de comprobantes y notificaciones')
                     ->schema([
@@ -121,7 +108,6 @@ class ConfiguracionPage extends Page
     {
         $data = $this->form->getState();
 
-        Configuracion::set('costo_filamento_kg', (int) $data['costo_filamento_kg']);
         Configuracion::setTexto('mail_mailer', $data['mail_mailer']);
         Configuracion::setTexto('mail_host', $data['mail_host'] ?? '');
         Configuracion::setTexto('mail_port', $data['mail_port'] ?? '');

@@ -1,5 +1,5 @@
 @php
-    $costoFilamentoKg = \App\Models\Configuracion::get('costo_filamento_kg', 25000);
+    $filamentoId = null;
 @endphp
 
 <x-filament::section>
@@ -9,8 +9,9 @@
 
     <div
         x-data="{
+            get filamentoId() { return Number($wire.get('data.filamento_id')) || null },
+            get precioKg() { return Number($wire.get('data.costo_filamento_kg')) || 25000 },
             get peso() { return Number($wire.get('data.filamento_gramos')) || 0 },
-            get precioKg() { return Number($wire.get('data.costo_filamento_kg')) || {{ $costoFilamentoKg }} },
             get horas() { return Number($wire.get('data.horas_impresion')) || 0 },
             get minutos() { return Number($wire.get('data.tiempo_minutos')) || 0 },
             get watts() { return Number($wire.get('data.consumo_watts')) || 120 },

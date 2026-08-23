@@ -18,8 +18,6 @@ return Application::configure(basePath: dirname(__DIR__))
             ResolveEmpresa::class,
             ApplyEmpresaMailConfig::class,
         ]);
-
-        $middleware->throttleWithRedis();
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

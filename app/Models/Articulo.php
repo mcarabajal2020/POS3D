@@ -8,6 +8,7 @@ use Database\Factories\ArticuloFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
 use Spatie\Activitylog\Support\LogOptions;
@@ -16,6 +17,8 @@ use Spatie\Activitylog\Support\LogOptions;
     'codigo_sku',
     'nombre',
     'descripcion',
+    'filamento_id',
+    'impresora_id',
     'tipo_material',
     'filamento_gramos',
     'horas_impresion',
@@ -66,6 +69,16 @@ class Articulo extends Model
     public function ventaItems(): HasMany
     {
         return $this->hasMany(VentaItem::class);
+    }
+
+    public function filamento(): BelongsTo
+    {
+        return $this->belongsTo(Filamento::class);
+    }
+
+    public function impresora(): BelongsTo
+    {
+        return $this->belongsTo(Impresora::class);
     }
 
     public function costoProduccion(): int
