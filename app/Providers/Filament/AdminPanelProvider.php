@@ -3,7 +3,6 @@
 namespace App\Providers\Filament;
 
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
-use BoreiStudio\FilamentMercadoPago\MercadoPagoPlugin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -40,6 +39,13 @@ class AdminPanelProvider extends PanelProvider
                 Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
+            ->navigationGroups([
+                'Operaciones',
+                'Finanzas',
+                'Configuración',
+            ])
+            ->databaseNotifications()
+            ->databaseNotificationsPolling('30s')
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
@@ -57,13 +63,6 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-            ->plugin(
-                MercadoPagoPlugin::make()
-                    ->payments()
-                    ->dashboard()
-                    ->documentation(false)
-                    ->navigationGroup('Mercado Pago'),
-            )
             ->plugin(
                 MobileBottomNav::make()
                     ->fromNavigation(4)

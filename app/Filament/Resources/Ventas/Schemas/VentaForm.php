@@ -30,6 +30,7 @@ class VentaForm
                             ->searchable()
                             ->preload()
                             ->required()
+                            ->default(fn () => Cliente::deEmpresa()->where('cuit_cuil', '99-99999999-9')->value('id'))
                             ->columnSpanFull(),
                         Grid::make(3)
                             ->schema([

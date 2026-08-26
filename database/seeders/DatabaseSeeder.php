@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             ConfiguracionSeeder::class,
+            ConsumidorFinalSeeder::class,
         ]);
     }
 }

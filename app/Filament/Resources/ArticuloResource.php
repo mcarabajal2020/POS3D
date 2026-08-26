@@ -14,6 +14,7 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use UnitEnum;
 
 class ArticuloResource extends Resource
 {
@@ -22,6 +23,10 @@ class ArticuloResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCube;
 
     protected static ?string $navigationLabel = 'Artículos';
+
+    protected static ?int $navigationSort = 2;
+
+    protected static string|UnitEnum|null $navigationGroup = 'Operaciones';
 
     protected static ?string $modelLabel = 'Artículo';
 

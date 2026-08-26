@@ -14,6 +14,7 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use UnitEnum;
 
 class ClienteResource extends Resource
 {
@@ -22,6 +23,10 @@ class ClienteResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUserGroup;
 
     protected static ?string $navigationLabel = 'Clientes';
+
+    protected static ?int $navigationSort = 3;
+
+    protected static string|UnitEnum|null $navigationGroup = 'Operaciones';
 
     protected static ?string $modelLabel = 'Cliente';
 

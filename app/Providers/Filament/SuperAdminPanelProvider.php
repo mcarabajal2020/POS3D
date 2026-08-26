@@ -49,6 +49,7 @@ class SuperAdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
+            ->databaseNotifications()
             ->plugins([
                 FilamentShieldPlugin::make(),
             ]);
