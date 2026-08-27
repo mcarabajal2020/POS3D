@@ -34,6 +34,11 @@ class FacturacionDeudaChart extends ChartWidget
             ->get()
             ->keyBy('dia');
 
+        $deudaInicial = MovimientoCuentaCorriente::query()
+            ->deEmpresa()
+            ->where('created_at', '<', $inicio)
+            ->sum('monto');
+
         $movimientos = MovimientoCuentaCorriente::query()
             ->deEmpresa()
             ->whereBetween('created_at', [$inicio, $fin])
@@ -49,7 +54,7 @@ class FacturacionDeudaChart extends ChartWidget
 
         $cursor = $inicio->copy();
         $acumFacturado = 0;
-        $acumDeuda = 0;
+        $acumDeuda = $deudaInicial;
 
         while ($cursor <= $fin) {
             $fechaStr = $cursor->toDateString();
@@ -65,7 +70,7 @@ class FacturacionDeudaChart extends ChartWidget
 
                 $movDia = $movimientos->get($fechaStr);
                 $acumDeuda += $movDia ? (int) $movDia->saldo : 0;
-                $deudaAcum[] = $acumDeuda;
+                $deudaAcum[] = max(0, $acumDeuda);
             }
 
             $cursor->addDay();
