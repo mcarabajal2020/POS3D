@@ -200,7 +200,7 @@ class ArticuloForm
                             ->required()
                             ->live(),
                         self::money('cantidad_piezas', 'Cantidad de piezas')
-                            ->minValue(1)
+                            ->default(1)
                             ->live(onBlur: true),
                     ]),
 
