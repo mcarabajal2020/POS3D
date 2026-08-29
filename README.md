@@ -135,10 +135,11 @@ npm run build
 php artisan serve
 ```
 
-## Credenciales por defecto
+## Crear usuario Super Admin
 
-- **Super Admin:** maxi@admin.com / password
-- **Admin:** elias@admin.com / password
+```bash
+php artisan shield:super-admin
+```
 
 ## Licencia
 
