@@ -55,7 +55,7 @@ class Articulo extends Model
             'tiempo_minutos' => 'integer',
             'consumo_watts' => 'integer',
             'costo_kwh' => 'integer',
-            'desgaste_maquina' => 'integer',
+            'desgaste_maquina' => 'decimal:2',
             'costo_mano_obra' => 'integer',
             'horas_trabajo' => 'decimal:2',
             'extras' => 'integer',

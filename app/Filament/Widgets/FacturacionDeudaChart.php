@@ -14,9 +14,9 @@ class FacturacionDeudaChart extends ChartWidget
 
     protected ?string $maxHeight = '250px';
 
-    protected ?string $heading = 'Facturación y Deuda acumulada';
+    protected ?string $heading = 'Facturación y Estado de cuenta';
 
-    protected ?string $description = 'Total facturado y deuda de cuenta corriente acumulada por día del mes en curso';
+    protected ?string $description = 'Total facturado, deuda y saldo a favor acumulado por día del mes en curso';
 
     protected function getData(): array
     {
@@ -51,6 +51,7 @@ class FacturacionDeudaChart extends ChartWidget
         $labels = [];
         $facturadoAcum = [];
         $deudaAcum = [];
+        $saldoFavorAcum = [];
 
         $cursor = $inicio->copy();
         $acumFacturado = 0;
@@ -63,6 +64,7 @@ class FacturacionDeudaChart extends ChartWidget
             if ($cursor > $hoy) {
                 $facturadoAcum[] = null;
                 $deudaAcum[] = null;
+                $saldoFavorAcum[] = null;
             } else {
                 $facturadoDia = $facturado->get($fechaStr);
                 $acumFacturado += $facturadoDia ? (int) $facturadoDia->total : 0;
@@ -70,7 +72,10 @@ class FacturacionDeudaChart extends ChartWidget
 
                 $movDia = $movimientos->get($fechaStr);
                 $acumDeuda += $movDia ? (int) $movDia->saldo : 0;
-                $deudaAcum[] = max(0, $acumDeuda);
+
+                // positivo = cliente debe (deuda), negativo = saldo a favor
+                $deudaAcum[] = $acumDeuda > 0 ? $acumDeuda : 0;
+                $saldoFavorAcum[] = $acumDeuda < 0 ? abs($acumDeuda) : 0;
             }
 
             $cursor->addDay();
@@ -91,6 +96,14 @@ class FacturacionDeudaChart extends ChartWidget
                     'data' => $deudaAcum,
                     'borderColor' => 'rgb(239, 68, 68)',
                     'backgroundColor' => 'rgba(239, 68, 68, 0.1)',
+                    'fill' => true,
+                    'tension' => 0.3,
+                ],
+                [
+                    'label' => 'Saldo a favor',
+                    'data' => $saldoFavorAcum,
+                    'borderColor' => 'rgb(59, 130, 246)',
+                    'backgroundColor' => 'rgba(59, 130, 246, 0.1)',
                     'fill' => true,
                     'tension' => 0.3,
                 ],

@@ -8,12 +8,22 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
 
 #[Fillable(['venta_id', 'articulo_id', 'cantidad', 'precio_unitario', 'subtotal'])]
 class VentaItem extends Model
 {
     /** @use HasFactory<VentaItemFactory> */
-    use BelongsToEmpresa, HasFactory;
+    use BelongsToEmpresa, HasFactory, LogsActivity;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['cantidad', 'precio_unitario', 'subtotal'])
+            ->logOnlyDirty()
+            ->dontLogEmptyChanges();
+    }
 
     protected static function boot(): void
     {

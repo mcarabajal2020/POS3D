@@ -32,7 +32,20 @@ class ArticuloForm
     protected static function money(string $name, ?string $label = null, bool $decimal = false): TextInput
     {
         $cleanInteger = fn ($state) => str_replace('.', '', $state);
-        $cleanDecimal = fn ($state) => str_replace(',', '.', str_replace('.', '', $state));
+
+        $cleanDecimal = function ($state) {
+            $state = str_replace(' ', '', $state);
+
+            if (str_contains($state, ',')) {
+                $parts = explode(',', $state);
+                $entero = str_replace('.', '', array_shift($parts));
+                $decimales = implode(',', $parts);
+
+                return $entero.'.'.$decimales;
+            }
+
+            return str_replace('.', '', $state);
+        };
 
         $field = TextInput::make($name)
             ->label($label)

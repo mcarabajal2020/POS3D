@@ -49,7 +49,7 @@ class ArticuloResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->deEmpresa();
+        return parent::getEloquentQuery()->deEmpresa()->with(['filamento', 'impresora']);
     }
 
     public static function getPages(): array

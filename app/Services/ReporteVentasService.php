@@ -67,7 +67,7 @@ class ReporteVentasService
             'total_transferencia' => $totalTransferencia,
             'total_cuenta_corriente' => $totalCuentaCorriente,
             'total_mercado_pago' => $totalMercadoPago,
-            'total_cobrado' => abs($totalCobrado),
+            'total_cobrado' => -1 * $totalCobrado,
         ];
     }
 
@@ -114,16 +114,16 @@ class ReporteVentasService
             fputcsv($handle, ['Desde:', $desde->format('d/m/Y'), 'Hasta:', $hasta->format('d/m/Y')]);
             fputcsv($handle, []);
             fputcsv($handle, ['RESUMEN']);
-            fputcsv($handle, ['Total Ventas', '$'.number_format($datos['totales']['total_ventas'], 0, ',', '.')]);
-            fputcsv($handle, ['Total Cobrado', '$'.number_format($datos['totales']['total_cobrado'], 0, ',', '.')]);
+            fputcsv($handle, ['Total Ventas', $datos['totales']['total_ventas']]);
+            fputcsv($handle, ['Total Cobrado', $datos['totales']['total_cobrado']]);
             fputcsv($handle, ['Cantidad Ventas', $datos['totales']['cantidad_ventas']]);
-            fputcsv($handle, ['Promedio por Venta', '$'.number_format($datos['totales']['promedio'], 0, ',', '.')]);
+            fputcsv($handle, ['Promedio por Venta', $datos['totales']['promedio']]);
             fputcsv($handle, []);
             fputcsv($handle, ['DESGLOSE POR TIPO DE PAGO']);
-            fputcsv($handle, ['Contado', '$'.number_format($datos['totales']['total_contado'], 0, ',', '.')]);
-            fputcsv($handle, ['Transferencia', '$'.number_format($datos['totales']['total_transferencia'], 0, ',', '.')]);
-            fputcsv($handle, ['Cuenta Corriente', '$'.number_format($datos['totales']['total_cuenta_corriente'], 0, ',', '.')]);
-            fputcsv($handle, ['MercadoPago', '$'.number_format($datos['totales']['total_mercado_pago'], 0, ',', '.')]);
+            fputcsv($handle, ['Contado', $datos['totales']['total_contado']]);
+            fputcsv($handle, ['Transferencia', $datos['totales']['total_transferencia']]);
+            fputcsv($handle, ['Cuenta Corriente', $datos['totales']['total_cuenta_corriente']]);
+            fputcsv($handle, ['MercadoPago', $datos['totales']['total_mercado_pago']]);
             fputcsv($handle, []);
 
             // Detalle
@@ -136,7 +136,7 @@ class ReporteVentasService
                     $item['tipo'],
                     $item['cliente'],
                     $item['descripcion'],
-                    '$'.number_format($item['monto'], 0, ',', '.'),
+                    $item['monto'],
                 ]);
             }
 

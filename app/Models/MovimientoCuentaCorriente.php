@@ -8,12 +8,22 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
 
 #[Fillable(['cliente_id', 'venta_id', 'tipo', 'monto', 'descripcion'])]
 class MovimientoCuentaCorriente extends Model
 {
     /** @use HasFactory<MovimientoCuentaCorrienteFactory> */
-    use BelongsToEmpresa, HasFactory;
+    use BelongsToEmpresa, HasFactory, LogsActivity;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['tipo', 'monto', 'descripcion'])
+            ->logOnlyDirty()
+            ->dontLogEmptyChanges();
+    }
 
     protected $table = 'movimientos_cuenta_corriente';
 
