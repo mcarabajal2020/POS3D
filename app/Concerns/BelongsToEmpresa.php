@@ -15,7 +15,7 @@ class EmpresaScope implements Scope
         $empresaId = session('empresa_id');
 
         if (is_null($empresaId)) {
-            throw new \RuntimeException('Empresa no identificada. Por favor, seleccione una empresa.');
+            return;
         }
 
         $builder->where("{$model->getTable()}.empresa_id", $empresaId);
