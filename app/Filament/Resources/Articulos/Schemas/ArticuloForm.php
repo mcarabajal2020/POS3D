@@ -186,10 +186,10 @@ class ArticuloForm
                 Section::make('Ajustes Finales')
                     ->columns(2)
                     ->schema([
-                        Select::make('margen_ganancia')
-                            ->label('Margen de ganancia')
+                        Select::make('multiplicador_precio')
+                            ->label('Multiplicador de precio')
                             ->options([
-                                1 => 'x1 - Sin margen',
+                                1 => 'x1',
                                 2 => 'x2 - Doble',
                                 3 => 'x3 - Triple',
                                 4 => 'x4 - Estándar',

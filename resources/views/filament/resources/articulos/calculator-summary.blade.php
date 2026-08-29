@@ -20,7 +20,7 @@
             get manoObra() { return Number($wire.get('data.costo_mano_obra')) || 0 },
             get horasTrabajo() { return Number($wire.get('data.horas_trabajo')) || 0 },
             get extrasVal() { return Number($wire.get('data.extras')) || 0 },
-            get margen() { return Number($wire.get('data.margen_ganancia')) || 4 },
+            get margen() { return Number($wire.get('data.multiplicador_precio')) || 4 },
             get cantPiezas() { return Number($wire.get('data.cantidad_piezas')) || 1 },
             get tiempoHoras() { return this.horas + (this.minutos / 60) },
             get material() { return Math.round((this.peso * this.precioKg) / 1000) },

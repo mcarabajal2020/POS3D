@@ -29,7 +29,7 @@ class CostoProduccionService
         $cantidad = max($articulo->cantidad_piezas, 1);
         $costoPorUnidad = (int) round($costoTotal / $cantidad);
 
-        $ventaSugerida = (int) round($costoTotal * $articulo->margen_ganancia);
+        $ventaSugerida = (int) round($costoTotal * $articulo->multiplicador_precio);
 
         return [
             'material' => $costoMaterial,

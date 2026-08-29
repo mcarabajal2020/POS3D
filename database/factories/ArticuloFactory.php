@@ -30,7 +30,7 @@ class ArticuloFactory extends Factory
             'costo_mano_obra' => 0,
             'horas_trabajo' => 0,
             'extras' => 0,
-            'margen_ganancia' => fake()->randomElement([2, 3, 4, 5]),
+            'multiplicador_precio' => fake()->randomElement([2, 3, 4, 5]),
             'cantidad_piezas' => 1,
             'precio_venta' => fake()->numberBetween(5000, 100000),
             'stock' => fake()->numberBetween(0, 50),

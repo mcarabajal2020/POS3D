@@ -18,7 +18,7 @@ function makeArticulo(array $overrides = []): Articulo
         'costo_mano_obra' => 0,
         'horas_trabajo' => 0,
         'extras' => 0,
-        'margen_ganancia' => 4,
+        'multiplicador_precio' => 4,
         'cantidad_piezas' => 1,
     ], $overrides));
 }

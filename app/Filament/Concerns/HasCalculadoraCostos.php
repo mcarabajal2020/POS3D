@@ -24,7 +24,7 @@ trait HasCalculadoraCostos
         $manoObra = (float) ($data['costo_mano_obra'] ?? 0);
         $horasTrabajo = (float) ($data['horas_trabajo'] ?? 0);
         $extras = (float) ($data['extras'] ?? 0);
-        $margen = (int) ($data['margen_ganancia'] ?? 4);
+        $margen = (int) ($data['multiplicador_precio'] ?? 4);
         $cantidad = max((int) ($data['cantidad_piezas'] ?? 1), 1);
 
         $tiempoTotalHoras = $horas + ($minutos / 60);
