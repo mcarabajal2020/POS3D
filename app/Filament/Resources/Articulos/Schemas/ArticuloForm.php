@@ -11,6 +11,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\View;
 use Filament\Schemas\Schema;
+use Filament\Support\RawJs;
 
 class ArticuloForm
 {
@@ -26,6 +27,25 @@ class ArticuloForm
         }
 
         return 'SKU-00001';
+    }
+
+    protected static function money(string $name, ?string $label = null, bool $decimal = false): TextInput
+    {
+        $cleanInteger = fn ($state) => str_replace('.', '', $state);
+        $cleanDecimal = fn ($state) => str_replace(',', '.', str_replace('.', '', $state));
+
+        $field = TextInput::make($name)
+            ->label($label)
+            ->type('text')
+            ->inputMode('decimal')
+            ->numeric()
+            ->minValue(0)
+            ->default(0)
+            ->mask(RawJs::make($decimal ? '$money($input, ",", ".", 2)' : '$money($input, ",", ".", 0)'))
+            ->mutateStateForValidationUsing($decimal ? $cleanDecimal : $cleanInteger)
+            ->dehydrateStateUsing($decimal ? $cleanDecimal : $cleanInteger);
+
+        return $field;
     }
 
     public static function configure(Schema $schema): Schema
@@ -70,9 +90,7 @@ class ArticuloForm
                                     }
                                 }
                             }),
-                        TextInput::make('costo_filamento_kg')
-                            ->label('Costo filamento/kg')
-                            ->numeric()
+                        self::money('costo_filamento_kg', 'Costo filamento/kg')
                             ->disabled()
                             ->dehydrated()
                             ->prefix('$')
@@ -88,11 +106,7 @@ class ArticuloForm
                             ->default('PLA')
                             ->required()
                             ->live(),
-                        TextInput::make('filamento_gramos')
-                            ->label('Peso de la pieza (gramos)')
-                            ->numeric()
-                            ->minValue(0)
-                            ->default(0)
+                        self::money('filamento_gramos', 'Peso de la pieza (gramos)', decimal: true)
                             ->suffix('gramos')
                             ->live(onBlur: true),
                     ]),
@@ -100,18 +114,10 @@ class ArticuloForm
                 Section::make('Tiempo')
                     ->columns(2)
                     ->schema([
-                        TextInput::make('horas_impresion')
-                            ->label('Horas')
-                            ->numeric()
-                            ->minValue(0)
-                            ->default(0)
+                        self::money('horas_impresion', 'Horas')
                             ->live(onBlur: true),
-                        TextInput::make('tiempo_minutos')
-                            ->label('Minutos')
-                            ->numeric()
-                            ->minValue(0)
+                        self::money('tiempo_minutos', 'Minutos')
                             ->maxValue(59)
-                            ->default(0)
                             ->live(onBlur: true),
                     ]),
 
@@ -134,53 +140,32 @@ class ArticuloForm
                                     }
                                 }
                             }),
-                        TextInput::make('consumo_watts')
-                            ->label('Consumo (watts)')
-                            ->numeric()
-                            ->minValue(0)
-                            ->default(120)
+                        self::money('consumo_watts', 'Consumo (watts)')
                             ->suffix('watts')
-                            ->live(onBlur: true),
-                        TextInput::make('costo_kwh')
-                            ->label('Costo kWh')
-                            ->numeric()
-                            ->minValue(0)
-                            ->default(50)
-                            ->prefix('$')
-                            ->live(onBlur: true),
-                        TextInput::make('desgaste_maquina')
-                            ->label('Desgaste máquina')
-                            ->numeric()
-                            ->minValue(0)
                             ->default(120)
+                            ->live(onBlur: true),
+                        self::money('costo_kwh', 'Costo kWh')
+                            ->prefix('$')
+                            ->default(50)
+                            ->live(onBlur: true),
+                        self::money('desgaste_maquina', 'Desgaste máquina')
                             ->prefix('$')
                             ->suffix('/h')
+                            ->default(120)
                             ->live(onBlur: true),
                     ]),
 
                 Section::make('Mano de Obra y Extras')
                     ->columns(3)
                     ->schema([
-                        TextInput::make('costo_mano_obra')
-                            ->label('Mano de obra')
-                            ->numeric()
-                            ->minValue(0)
-                            ->default(0)
+                        self::money('costo_mano_obra', 'Mano de obra')
                             ->prefix('$')
                             ->suffix('/h')
                             ->live(onBlur: true),
-                        TextInput::make('horas_trabajo')
-                            ->label('Horas de trabajo')
-                            ->numeric()
-                            ->minValue(0)
-                            ->default(0)
+                        self::money('horas_trabajo', 'Horas de trabajo', decimal: true)
                             ->suffix('h')
                             ->live(onBlur: true),
-                        TextInput::make('extras')
-                            ->label('Extras')
-                            ->numeric()
-                            ->minValue(0)
-                            ->default(0)
+                        self::money('extras', 'Extras')
                             ->prefix('$')
                             ->live(onBlur: true),
                     ]),
@@ -201,11 +186,8 @@ class ArticuloForm
                             ->default(4)
                             ->required()
                             ->live(),
-                        TextInput::make('cantidad_piezas')
-                            ->label('Cantidad de piezas')
-                            ->numeric()
+                        self::money('cantidad_piezas', 'Cantidad de piezas')
                             ->minValue(1)
-                            ->default(1)
                             ->live(onBlur: true),
                     ]),
 
@@ -215,19 +197,11 @@ class ArticuloForm
                 Section::make('Precio y Stock')
                     ->columns(2)
                     ->schema([
-                        TextInput::make('precio_venta')
-                            ->label('Precio de venta ($)')
+                        self::money('precio_venta', 'Precio de venta ($)')
                             ->required()
-                            ->numeric()
-                            ->minValue(0)
-                            ->default(0)
                             ->prefix('$'),
-                        TextInput::make('stock')
-                            ->label('Stock')
-                            ->required()
-                            ->numeric()
-                            ->minValue(0)
-                            ->default(0),
+                        self::money('stock', 'Stock')
+                            ->required(),
                     ]),
             ]);
     }

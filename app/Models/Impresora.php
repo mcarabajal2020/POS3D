@@ -33,7 +33,7 @@ class Impresora extends Model
     {
         return [
             'consumo_watts' => 'integer',
-            'desgaste_hora' => 'integer',
+            'desgaste_hora' => 'decimal:2',
         ];
     }
 
