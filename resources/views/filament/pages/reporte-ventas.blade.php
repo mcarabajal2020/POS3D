@@ -34,21 +34,31 @@
                     <p class="text-xs text-gray-400">{{ $totales['cantidad_ventas'] }} ventas · Promedio ${{ number_format($totales['promedio'], 0, ',', '.') }}</p>
                 </div>
                 <div class="rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-900">
+                    <p class="text-sm text-gray-500">Costo Producción</p>
+                    <p class="text-xl font-bold text-danger-600">${{ number_format($totales['total_costo_produccion'], 0, ',', '.') }}</p>
+                    <p class="text-xs text-gray-400">Material + Electricidad + Desgaste + Mano de obra</p>
+                </div>
+                <div class="rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-900">
+                    <p class="text-sm text-gray-500">Ganancia Real</p>
+                    @php $gananciaColor = $totales['ganancia_real'] >= 0 ? 'text-success-600' : 'text-danger-600'; @endphp
+                    <p class="text-xl font-bold {{ $gananciaColor }}">${{ number_format($totales['ganancia_real'], 0, ',', '.') }}</p>
+                    @if($totales['total_ventas'] > 0)
+                        @php $margen = round(($totales['ganancia_real'] / $totales['total_ventas']) * 100, 1); @endphp
+                        <p class="text-xs text-gray-400">Margen: {{ $margen }}%</p>
+                    @endif
+                </div>
+                <div class="rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-900">
                     <p class="text-sm text-gray-500">Total Cobrado</p>
                     <p class="text-xl font-bold text-success-600">${{ number_format($totales['total_cobrado'], 0, ',', '.') }}</p>
                     <p class="text-xs text-gray-400">Pagos recibidos en el período</p>
                 </div>
-                <div class="rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-900">
-                    <p class="text-sm text-gray-500">Descuentos</p>
-                    <p class="text-xl font-bold text-warning-600">${{ number_format($totales['total_descuentos'], 0, ',', '.') }}</p>
-                </div>
-                <div class="rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-900">
-                    <p class="text-sm text-gray-500">Cuenta Corriente (pend.)</p>
-                    <p class="text-xl font-bold text-danger-600">${{ number_format($totales['total_cuenta_corriente'], 0, ',', '.') }}</p>
-                </div>
             </div>
 
             <div class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-900">
+                    <p class="text-xs text-gray-500">Descuentos</p>
+                    <p class="text-sm font-semibold text-warning-600">${{ number_format($totales['total_descuentos'], 0, ',', '.') }}</p>
+                </div>
                 <div class="rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-900">
                     <p class="text-xs text-gray-500">Contado</p>
                     <p class="text-sm font-semibold">${{ number_format($totales['total_contado'], 0, ',', '.') }}</p>
@@ -61,9 +71,12 @@
                     <p class="text-xs text-gray-500">MercadoPago</p>
                     <p class="text-sm font-semibold">${{ number_format($totales['total_mercado_pago'], 0, ',', '.') }}</p>
                 </div>
+            </div>
+
+            <div class="mt-4 grid grid-cols-1 md:grid-cols-1 gap-4">
                 <div class="rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-900">
-                    <p class="text-xs text-gray-500">Cuenta Corriente</p>
-                    <p class="text-sm font-semibold">${{ number_format($totales['total_cuenta_corriente'], 0, ',', '.') }}</p>
+                    <p class="text-xs text-gray-500">Cuenta Corriente (pendiente)</p>
+                    <p class="text-sm font-semibold text-danger-600">${{ number_format($totales['total_cuenta_corriente'], 0, ',', '.') }}</p>
                 </div>
             </div>
         </x-filament::section>

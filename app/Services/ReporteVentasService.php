@@ -10,6 +10,10 @@ use Illuminate\Support\Collection;
 
 class ReporteVentasService
 {
+    public function __construct(
+        protected CostoProduccionService $costoService,
+    ) {}
+
     public function obtenerDatos(Carbon $desde, Carbon $hasta): array
     {
         $ventas = $this->obtenerVentas($desde, $hasta);
@@ -28,7 +32,7 @@ class ReporteVentasService
         return Venta::deEmpresa()
             ->whereDate('fecha', '>=', $desde)
             ->whereDate('fecha', '<=', $hasta)
-            ->with('cliente')
+            ->with(['cliente', 'items.articulo.filamento'])
             ->orderBy('fecha', 'desc')
             ->get();
     }
@@ -58,6 +62,18 @@ class ReporteVentasService
         $cobros = $movimientos->where('tipo', 'pago');
         $totalCobrado = $cobros->sum('monto');
 
+        $totalCostoProduccion = 0;
+        foreach ($ventas as $venta) {
+            foreach ($venta->items as $item) {
+                if ($item->articulo) {
+                    $costo = $this->costoService->calcular($item->articulo);
+                    $totalCostoProduccion += $costo['costo_por_unidad'] * $item->cantidad;
+                }
+            }
+        }
+
+        $gananciaReal = $totalVentas - $totalCostoProduccion;
+
         return [
             'total_ventas' => $totalVentas,
             'total_descuentos' => $totalDescuentos,
@@ -68,6 +84,8 @@ class ReporteVentasService
             'total_cuenta_corriente' => $totalCuentaCorriente,
             'total_mercado_pago' => $totalMercadoPago,
             'total_cobrado' => -1 * $totalCobrado,
+            'total_costo_produccion' => $totalCostoProduccion,
+            'ganancia_real' => $gananciaReal,
         ];
     }
 
@@ -115,6 +133,8 @@ class ReporteVentasService
             fputcsv($handle, []);
             fputcsv($handle, ['RESUMEN']);
             fputcsv($handle, ['Total Ventas', $datos['totales']['total_ventas']]);
+            fputcsv($handle, ['Costo Produccion', $datos['totales']['total_costo_produccion']]);
+            fputcsv($handle, ['Ganancia Real', $datos['totales']['ganancia_real']]);
             fputcsv($handle, ['Total Cobrado', $datos['totales']['total_cobrado']]);
             fputcsv($handle, ['Cantidad Ventas', $datos['totales']['cantidad_ventas']]);
             fputcsv($handle, ['Promedio por Venta', $datos['totales']['promedio']]);
