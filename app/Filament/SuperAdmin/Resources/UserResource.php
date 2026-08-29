@@ -42,13 +42,6 @@ class UserResource extends Resource
                     ->required()
                     ->maxLength(255)
                     ->unique(ignoreRecord: true),
-                TextInput::make('current_password')
-                    ->password()
-                    ->label('Contraseña actual')
-                    ->required(fn (string $operation): bool => $operation === 'edit')
-                    ->dehydrated(false)
-                    ->maxLength(255)
-                    ->visible(fn (string $operation): bool => $operation === 'edit'),
                 TextInput::make('password')
                     ->password()
                     ->dehydrateStateUsing(fn (string $state): string => filled($state) ? bcrypt($state) : $state)
