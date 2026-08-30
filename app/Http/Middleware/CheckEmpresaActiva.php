@@ -25,11 +25,11 @@ class CheckEmpresaActiva
         $empresa = Empresa::find($empresaId);
 
         if ($empresa && ! $empresa->tienePlanActivo()) {
-            if ($request->routeIs('empresa-inactiva') || $request->routeIs('comprobante.store')) {
+            if ($request->routeIs('filament.admin.pages.empresa-inactiva') || str_starts_with($request->path(), 'admin/empresa-inactiva')) {
                 return $next($request);
             }
 
-            return redirect()->route('empresa-inactiva');
+            return redirect()->route('filament.admin.pages.empresa-inactiva');
         }
 
         return $next($request);
