@@ -6,10 +6,11 @@ use Database\Factories\EmpresaFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[Fillable(['nombre', 'cuit', 'direccion', 'telefono', 'email', 'activa'])]
+#[Fillable(['nombre', 'cuit', 'direccion', 'telefono', 'email', 'activa', 'subscription_id'])]
 class Empresa extends Model
 {
     /** @use HasFactory<EmpresaFactory> */
@@ -29,6 +30,11 @@ class Empresa extends Model
             ->withTimestamps();
     }
 
+    public function subscription(): BelongsTo
+    {
+        return $this->belongsTo(Subscription::class);
+    }
+
     public function clientes(): HasMany
     {
         return $this->hasMany(Cliente::class);
@@ -42,5 +48,10 @@ class Empresa extends Model
     public function ventas(): HasMany
     {
         return $this->hasMany(Venta::class);
+    }
+
+    public function tienePlanActivo(): bool
+    {
+        return $this->subscription && $this->subscription->estaActiva();
     }
 }
