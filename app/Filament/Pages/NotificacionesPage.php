@@ -14,6 +14,8 @@ class NotificacionesPage extends Page
 
     protected static ?int $navigationSort = 10;
 
+    protected string $view = 'filament.pages.notificaciones-page';
+
     public static function getNavigationIcon(): ?string
     {
         return 'heroicon-o-bell';
