@@ -79,7 +79,7 @@ class EmpresaInactivaPage extends Page
                 'notas' => $data['notas'] ?? null,
             ]);
 
-            $admins = User::whereHas('roles', fn ($q) => $q->where('name', 'super_admin'))->get();
+            $admins = User::whereHas('roles', fn ($q) => $q->whereIn('name', ['super_admin', 'admin']))->get();
 
             foreach ($admins as $admin) {
                 $admin->notify(new ComprobantePagoNotification($comprobante));
