@@ -53,6 +53,7 @@ class EmpresaInactivaPage extends Page
                 FileUpload::make('archivo')
                     ->label('Comprobante de transferencia')
                     ->image()
+                    ->disk('public')
                     ->directory('comprobantes-pago')
                     ->visibility('public')
                     ->required(),
