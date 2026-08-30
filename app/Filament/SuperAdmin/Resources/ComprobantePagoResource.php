@@ -13,6 +13,7 @@ use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
@@ -138,7 +139,7 @@ class ComprobantePagoResource extends Resource
     {
         return $schema
             ->schema([
-                Infolists\Components\Section::make('Datos del comprobante')
+                Section::make('Datos del comprobante')
                     ->schema([
                         TextEntry::make('empresa.nombre')
                             ->label('Empresa'),
@@ -159,7 +160,7 @@ class ComprobantePagoResource extends Resource
                             ->dateTime('d/m/Y H:i'),
                     ])
                     ->columns(2),
-                Infolists\Components\Section::make('Comprobante')
+                Section::make('Comprobante')
                     ->schema([
                         ImageEntry::make('archivo')
                             ->label('Imagen del comprobante')
