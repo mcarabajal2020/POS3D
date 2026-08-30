@@ -3,14 +3,10 @@
 namespace App\Notifications;
 
 use App\Models\ComprobantePago;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
 
-class ComprobantePagoNotification extends Notification implements ShouldQueue
+class ComprobantePagoNotification extends Notification
 {
-    use Queueable;
-
     public function __construct(
         public ComprobantePago $comprobante,
     ) {}
