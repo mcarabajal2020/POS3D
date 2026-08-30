@@ -13,15 +13,16 @@ class CreateEmpresa extends CreateRecord
 
     protected function afterCreate(): void
     {
-        Cliente::create([
-            'nombre' => 'Consumidor Final',
-            'cuit_cuil' => '99-99999999-9',
-            'direccion' => 'Sin especificar',
-            'telefono' => '',
-            'email' => '',
-            'condicion_iva' => CondicionIva::ConsumidorFinal,
-            'saldo' => 0,
-            'empresa_id' => $this->record->id,
-        ]);
+        Cliente::firstOrCreate(
+            ['cuit_cuil' => '99-99999999-9', 'empresa_id' => $this->record->id],
+            [
+                'nombre' => 'Consumidor Final',
+                'direccion' => 'Sin especificar',
+                'telefono' => '',
+                'email' => '',
+                'condicion_iva' => CondicionIva::ConsumidorFinal,
+                'saldo' => 0,
+            ],
+        );
     }
 }
