@@ -10,8 +10,10 @@ use App\Notifications\FacturaGeneradaNotification;
 use App\Services\FacturacionService;
 use BackedEnum;
 use Filament\Actions;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -46,9 +48,31 @@ class InvoiceResource extends Resource
                     ->searchable()
                     ->preload()
                     ->required()
-                    ->disabled(),
+                    ->disabled(fn (?Invoice $record) => $record !== null),
+                Select::make('subscription_id')
+                    ->label('Suscripción')
+                    ->options(fn (Invoice $record) => $record->empresa
+                        ? $record->empresa->subscriptions->pluck('plan.nombre', 'id')
+                        : Subscription::with('plan')->get()->mapWithKeys(fn ($s) => [$s->id => "{$s->empresa->nombre} - {$s->plan->nombre}"])
+                    )
+                    ->searchable()
+                    ->preload()
+                    ->disabled(fn (?Invoice $record) => $record !== null),
+                TextInput::make('monto')
+                    ->label('Monto ($)')
+                    ->required()
+                    ->numeric()
+                    ->prefix('$'),
                 Select::make('estado')
                     ->options(EstadoInvoice::class)
+                    ->required(),
+                DatePicker::make('fecha_emision')
+                    ->label('Fecha de emisión')
+                    ->default(now())
+                    ->required(),
+                DatePicker::make('fecha_vencimiento')
+                    ->label('Fecha de vencimiento')
+                    ->default(now()->addDays(15))
                     ->required(),
                 Textarea::make('nota')
                     ->rows(3),
