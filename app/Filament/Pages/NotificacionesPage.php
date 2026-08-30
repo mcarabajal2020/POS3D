@@ -22,7 +22,7 @@ class NotificacionesPage extends Page
         return 'heroicon-o-bell';
     }
 
-    public static function getNavigationGroup(): string|UnitEnum|null
+    public static function getNavigationGroup(): string|\UnitEnum|null
     {
         return 'Operaciones';
     }
