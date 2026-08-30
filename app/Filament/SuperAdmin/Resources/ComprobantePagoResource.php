@@ -8,7 +8,7 @@ use App\Models\ComprobantePago;
 use App\Models\Empresa;
 use App\Models\Subscription;
 use BackedEnum;
-use Filament\Infolists;
+use Filament\Actions;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Notifications\Notification;
@@ -70,7 +70,7 @@ class ComprobantePagoResource extends Resource
                     ]),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
+                Actions\ViewAction::make(),
                 Tables\Actions\Action::make('aprobar')
                     ->label('Aprobar')
                     ->icon('heroicon-o-check')
