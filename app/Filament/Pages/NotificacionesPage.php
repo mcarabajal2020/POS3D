@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 
 class NotificacionesPage extends Page
 {
-    protected static ?string $navigationIcon = 'heroicon-o-bell';
+    protected static BackedEnum|string|null $navigationIcon = 'heroicon-o-bell';
 
     protected static ?string $navigationLabel = 'Notificaciones';
 
