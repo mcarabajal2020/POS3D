@@ -13,7 +13,7 @@ class NotificacionesPage extends Page
 
     protected static ?string $title = 'Notificaciones';
 
-    protected static string|null $navigationGroup = 'Operaciones';
+    protected static UnitEnum|string|null $navigationGroup = 'Operaciones';
 
     protected static ?int $navigationSort = 10;
 
