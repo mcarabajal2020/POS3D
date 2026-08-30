@@ -7,19 +7,25 @@ use Illuminate\Support\Facades\Auth;
 
 class NotificacionesPage extends Page
 {
-    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-bell';
-
     protected static ?string $navigationLabel = 'Notificaciones';
 
     protected static ?string $title = 'Notificaciones';
-
-    protected static string|UnitEnum|null $navigationGroup = 'Operaciones';
 
     protected static ?int $navigationSort = 10;
 
     public ?array $notifications = [];
 
     public int $unreadCount = 0;
+
+    public static function getNavigationIcon(): ?string
+    {
+        return 'heroicon-o-bell';
+    }
+
+    public static function getNavigationGroup(): string|UnitEnum|null
+    {
+        return 'Operaciones';
+    }
 
     public function mount(): void
     {
