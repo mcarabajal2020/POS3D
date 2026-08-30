@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ComprobantePago extends Model
 {
+    protected $table = 'comprobantes_pago';
+
     protected $fillable = [
         'empresa_id',
         'subscription_id',
