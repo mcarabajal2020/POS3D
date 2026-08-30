@@ -11,6 +11,7 @@ use App\Models\Subscription;
 use App\Services\FacturacionService;
 use BackedEnum;
 use Filament\Actions;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
@@ -60,6 +61,16 @@ class SubscriptionResource extends Resource
                     ->label('Ciclo de facturación')
                     ->options(CicloFacturacion::class)
                     ->required(),
+                DatePicker::make('fecha_inicio')
+                    ->label('Fecha de inicio')
+                    ->default(now())
+                    ->required(),
+                DatePicker::make('fecha_fin')
+                    ->label('Fecha de fin')
+                    ->helperText('Dejar vacío si es trial o sin vencimiento'),
+                DatePicker::make('trial_fin')
+                    ->label('Fin de prueba')
+                    ->helperText('Si aplica período de prueba'),
             ]);
     }
 
