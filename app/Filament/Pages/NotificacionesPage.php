@@ -3,6 +3,7 @@
 namespace App\Filament\Pages;
 
 use Filament\Pages\Page;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
 class NotificacionesPage extends Page
@@ -12,10 +13,6 @@ class NotificacionesPage extends Page
     protected static ?string $title = 'Notificaciones';
 
     protected static ?int $navigationSort = 10;
-
-    public ?array $notifications = [];
-
-    public int $unreadCount = 0;
 
     public static function getNavigationIcon(): ?string
     {
@@ -27,40 +24,24 @@ class NotificacionesPage extends Page
         return 'Operaciones';
     }
 
-    public function mount(): void
+    public function getNotifications(): Collection
     {
-        $this->loadNotifications();
+        return Auth::user()->notifications()->latest()->take(50)->get();
     }
 
-    public function loadNotifications(): void
+    public function getUnreadCount(): int
     {
-        $user = Auth::user();
-
-        $this->notifications = $user->notifications()
-            ->latest()
-            ->take(50)
-            ->get()
-            ->map(fn ($notification) => [
-                'id' => $notification->id,
-                'data' => $notification->data,
-                'read_at' => $notification->read_at,
-                'created_at' => $notification->created_at,
-            ])
-            ->toArray();
-
-        $this->unreadCount = $user->unreadNotifications()->count();
+        return Auth::user()->unreadNotifications()->count();
     }
 
     public function markAsRead(string $notificationId): void
     {
         Auth::user()->notifications()->where('id', $notificationId)->update(['read_at' => now()]);
-        $this->loadNotifications();
     }
 
     public function markAllAsRead(): void
     {
         Auth::user()->unreadNotifications()->update(['read_at' => now()]);
-        $this->loadNotifications();
     }
 
     public function getColor(string $color): string
