@@ -17,7 +17,7 @@ class InfoPlanWidget extends Widget
 
     public function mount(): void
     {
-        $empresa = user()->empresaActual();
+        $empresa = auth()->user()?->empresaActual();
 
         if (! $empresa) {
             return;
