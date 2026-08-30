@@ -35,6 +35,12 @@ class SuperAdminPanelProvider extends PanelProvider
                 Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/SuperAdmin/Widgets'), for: 'App\Filament\SuperAdmin\Widgets')
+            ->navigationGroups([
+                'Empresas',
+                'Herramientas',
+                'Facturación',
+                'Usuarios',
+            ])
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
