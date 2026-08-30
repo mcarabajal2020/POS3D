@@ -71,7 +71,7 @@ class ComprobantePagoResource extends Resource
             ])
             ->actions([
                 Actions\ViewAction::make(),
-                Tables\Actions\Action::make('aprobar')
+                Actions\Action::make('aprobar')
                     ->label('Aprobar')
                     ->icon('heroicon-o-check')
                     ->color('success')
@@ -109,7 +109,7 @@ class ComprobantePagoResource extends Resource
                             ->send();
                     })
                     ->visible(fn (ComprobantePago $record) => $record->estado === 'pendiente'),
-                Tables\Actions\Action::make('rechazar')
+                Actions\Action::make('rechazar')
                     ->label('Rechazar')
                     ->icon('heroicon-o-x-mark')
                     ->color('danger')
@@ -128,8 +128,8 @@ class ComprobantePagoResource extends Resource
                     ->visible(fn (ComprobantePago $record) => $record->estado === 'pendiente'),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                Actions\BulkActionGroup::make([
+                    Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }
