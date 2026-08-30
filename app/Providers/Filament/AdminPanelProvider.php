@@ -2,7 +2,6 @@
 
 namespace App\Providers\Filament;
 
-use App\Filament\Widgets\InfoPlanWidget;
 use App\Http\Middleware\CheckEmpresaActiva;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Filament\Http\Middleware\Authenticate;
@@ -41,7 +40,6 @@ class AdminPanelProvider extends PanelProvider
                 Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
-            ->excludeWidgets([InfoPlanWidget::class])
             ->navigationGroups([
                 'Operaciones',
                 'Finanzas',

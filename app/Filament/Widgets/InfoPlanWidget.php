@@ -3,10 +3,16 @@
 namespace App\Filament\Widgets;
 
 use App\Services\FacturacionService;
+use Filament\Facades\Filament;
 use Filament\Widgets\Widget;
 
 class InfoPlanWidget extends Widget
 {
+    public static function canView(): bool
+    {
+        return Filament::getCurrentPanel()?->getId() !== 'admin';
+    }
+
     protected string $view = 'filament.widgets.info-plan';
 
     protected int|string|array $columnSpan = 'full';
