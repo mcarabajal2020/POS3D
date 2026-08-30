@@ -93,13 +93,14 @@ class ComprobantePagoResource extends Resource
                                     'fecha_fin' => now()->addMonth(),
                                 ]);
                             } else {
-                                Subscription::create([
+                                $sub = Subscription::create([
                                     'empresa_id' => $empresa->id,
                                     'plan_id' => 1,
                                     'estado' => EstadoSubscription::Activa,
                                     'fecha_inicio' => now(),
                                     'fecha_fin' => now()->addMonth(),
                                 ]);
+                                $empresa->update(['subscription_id' => $sub->id]);
                             }
                         }
 
