@@ -69,7 +69,9 @@ class EnviarNotificacion extends Page implements HasForms
                     ->multiple()
                     ->searchable()
                     ->preload()
-                    ->helperText('Solo se usa cuando el destino es "Por empresa(s)"'),
+                    ->helperText('Seleccioná una o más empresas')
+                    ->visible(fn ($get) => $get('destino') === 'por_empresa')
+                    ->required(fn ($get) => $get('destino') === 'por_empresa'),
             ])
             ->statePath('data');
     }
