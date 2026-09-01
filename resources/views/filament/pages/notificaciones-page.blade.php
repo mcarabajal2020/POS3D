@@ -26,11 +26,11 @@
                     $color = $data['color'] ?? 'gray';
                 @endphp
                 <div wire:click="markAsRead('{{ $notification->id }}')"
-                     class="relative cursor-pointer overflow-hidden rounded-2xl border shadow-sm transition-all duration-200 hover:shadow-md
+                     class="relative cursor-pointer overflow-hidden rounded-2xl border shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg
                          @if($isRead)
-                             border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900/50
+                             border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900/50 hover:border-gray-300 dark:hover:border-gray-600
                          @else
-                             border-amber-300 bg-amber-50 dark:border-amber-600 dark:bg-amber-900/20
+                             border-amber-300 bg-amber-50 dark:border-amber-600 dark:bg-amber-900/20 hover:border-amber-400 dark:hover:border-amber-500
                          @endif">
 
                     <div class="flex items-start gap-4 p-5">
