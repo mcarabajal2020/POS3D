@@ -70,8 +70,7 @@ class EnviarNotificacion extends Page implements HasForms
                     ->searchable()
                     ->preload()
                     ->helperText('Seleccioná una o más empresas')
-                    ->visible(fn ($get) => $get('destino') === 'por_empresa')
-                    ->required(fn ($get) => $get('destino') === 'por_empresa'),
+                    ->visible(fn ($get) => $get('destino') === 'por_empresa'),
             ])
             ->statePath('data');
     }
