@@ -13,6 +13,7 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Str;
 use UnitEnum;
@@ -62,15 +63,18 @@ class EnviarNotificacion extends Page implements HasForms
                         'por_empresa' => 'Por empresa(s)',
                     ])
                     ->default('todos')
-                    ->live(),
+                    ->live()
+                    ->afterStateUpdated(fn (Set $set) => $set('empresas', [])),
                 Select::make('empresas')
                     ->label('Empresas')
                     ->options(Empresa::pluck('nombre', 'id'))
                     ->multiple()
                     ->searchable()
                     ->preload()
+                    ->live()
+                    ->dehydrated()
                     ->helperText('Seleccioná una o más empresas')
-                    ->visible(fn ($get) => $get('destino') === 'por_empresa'),
+                    ->disabled(fn ($get) => $get('destino') !== 'por_empresa'),
             ])
             ->statePath('data');
     }
