@@ -11,6 +11,7 @@ use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
+use Filament\View\PanelsRenderHook;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
@@ -58,6 +59,10 @@ class SuperAdminPanelProvider extends PanelProvider
             ->databaseNotifications()
             ->plugins([
                 FilamentShieldPlugin::make(),
-            ]);
+            ])
+            ->renderHook(
+                PanelsRenderHook::STYLES_AFTER,
+                fn () => '<style>.fi-sidebar{background-color:#dbeafe}.dark .fi-sidebar{background-color:rgb(17 24 39)}.fi-body-has-topbar .fi-sidebar-header{background-color:#dbeafe}.dark .fi-body-has-topbar .fi-sidebar-header{background-color:rgb(17 24 39)}.fi-sidebar-item-label{color:#1e3a5f}.dark .fi-sidebar-item-label{color:rgb(209 213 219)}.fi-sidebar-item-active .fi-sidebar-item-icon{color:#1e3a5f}.dark .fi-sidebar-item-active .fi-sidebar-item-icon{color:rgb(96 165 250)}.fi-sidebar-item-active{background-color:#bfdbfe}.dark .fi-sidebar-item-active{background-color:rgba(255 255 255 / 0.05)}.fi-sidebar-group-label{color:#1e3a5f}.dark .fi-sidebar-group-label{color:rgb(156 163 175)}</style>',
+            );
     }
 }

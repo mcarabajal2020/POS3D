@@ -6,6 +6,7 @@
     <style>
         body { font-family: sans-serif; font-size: 11px; color: #333; }
         .header { text-align: center; margin-bottom: 20px; border-bottom: 2px solid #f59e0b; padding-bottom: 10px; }
+        .header-logo { max-height: 50px; max-width: 150px; object-fit: contain; margin-bottom: 8px; }
         .header h1 { font-size: 18px; margin: 0; }
         .header p { color: #666; margin: 4px 0 0; }
         .summary { margin-bottom: 20px; }
@@ -32,6 +33,14 @@
 </head>
 <body>
     <div class="header">
+        @if($empresa && $empresa->logo && file_exists(storage_path('app/public/' . $empresa->logo)))
+            @php
+                $logoPath = storage_path('app/public/' . $empresa->logo);
+                $logoMime = mime_content_type($logoPath);
+                $logoData = base64_encode(file_get_contents($logoPath));
+            @endphp
+            <img src="data:{{ $logoMime }};base64,{{ $logoData }}" alt="{{ $empresa->nombre }}" class="header-logo">
+        @endif
         <h1>Reporte de Ventas y Cobros</h1>
         <p>Desde {{ $desde->format('d/m/Y') }} hasta {{ $hasta->format('d/m/Y') }}</p>
     </div>

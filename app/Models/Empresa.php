@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[Fillable(['nombre', 'cuit', 'direccion', 'telefono', 'email', 'activa', 'subscription_id'])]
+#[Fillable(['nombre', 'cuit', 'direccion', 'telefono', 'email', 'logo', 'activa', 'subscription_id'])]
 class Empresa extends Model
 {
     /** @use HasFactory<EmpresaFactory> */
@@ -53,5 +53,14 @@ class Empresa extends Model
     public function tienePlanActivo(): bool
     {
         return $this->subscription && $this->subscription->estaActiva();
+    }
+
+    public function getLogoUrlAttribute(): ?string
+    {
+        if (! $this->logo) {
+            return null;
+        }
+
+        return asset('storage/'.$this->logo);
     }
 }

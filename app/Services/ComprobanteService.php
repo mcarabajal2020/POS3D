@@ -11,7 +11,7 @@ class ComprobanteService
 {
     public function generarPdf(Venta $venta): PDF
     {
-        $venta->load(['cliente', 'items.articulo']);
+        $venta->load(['cliente', 'items.articulo', 'empresa']);
 
         return app(PDF::class)
             ->loadView('comprobantes.venta', ['venta' => $venta])

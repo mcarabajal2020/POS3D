@@ -174,11 +174,13 @@ class ReporteVentasService
     public function exportarPdf(Carbon $desde, Carbon $hasta): PDF
     {
         $datos = $this->obtenerDatos($desde, $hasta);
+        $empresa = auth()->user()->empresaActual();
 
         $pdf = app(PDF::class)->loadView('filament.pages.reporte-ventas-pdf', [
             'datos' => $datos,
             'desde' => $desde,
             'hasta' => $hasta,
+            'empresa' => $empresa,
         ]);
 
         $pdf->setPaper('a4', 'landscape');

@@ -8,6 +8,7 @@
         .page { width: 75%; margin: 0 auto; padding: 20px; }
 
         .header-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; border-bottom: 2px solid #f59e0b; padding-bottom: 15px; }
+        .company-logo { max-height: 60px; max-width: 180px; object-fit: contain; margin-bottom: 8px; }
         .company-name { font-size: 22px; font-weight: bold; color: #f59e0b; }
         .company-info { font-size: 9px; color: #666; margin-top: 3px; line-height: 1.4; }
         .invoice-title { text-align: right; }
@@ -44,6 +45,14 @@
         <table class="header-table">
             <tr>
                 <td style="vertical-align: top;">
+                    @if($venta->empresa?->logo && file_exists(storage_path('app/public/' . $venta->empresa->logo)))
+                        @php
+                            $logoPath = storage_path('app/public/' . $venta->empresa->logo);
+                            $logoMime = mime_content_type($logoPath);
+                            $logoData = base64_encode(file_get_contents($logoPath));
+                        @endphp
+                        <img src="data:{{ $logoMime }};base64,{{ $logoData }}" alt="{{ $venta->empresa->nombre }}" class="company-logo">
+                    @endif
                     <div class="company-name">{{ $venta->empresa->nombre ?? config('app.name') }}</div>
                     <div class="company-info">
                         {{ $venta->empresa->direccion ?? 'Buenos Aires, Argentina' }}<br>

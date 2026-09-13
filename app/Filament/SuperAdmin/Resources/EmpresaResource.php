@@ -5,11 +5,16 @@ namespace App\Filament\SuperAdmin\Resources;
 use App\Filament\SuperAdmin\Resources\EmpresaResource\Pages;
 use App\Models\Empresa;
 use BackedEnum;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
+use Filament\Support\Enums\FontWeight;
 use Filament\Tables;
 use Filament\Tables\Table;
 
@@ -29,6 +34,14 @@ class EmpresaResource extends Resource
     {
         return $schema
             ->components([
+                FileUpload::make('logo')
+                    ->disk('public')
+                    ->directory('logos-empresas')
+                    ->visibility('public')
+                    ->image()
+                    ->imageEditor()
+                    ->maxSize(2048)
+                    ->columnSpanFull(),
                 TextInput::make('nombre')
                     ->required()
                     ->maxLength(255),
@@ -53,7 +66,7 @@ class EmpresaResource extends Resource
                 Tables\Columns\TextColumn::make('nombre')
                     ->searchable()
                     ->sortable()
-                    ->weight(\Filament\Support\Enums\FontWeight::Bold),
+                    ->weight(FontWeight::Bold),
                 Tables\Columns\TextColumn::make('cuit')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
@@ -76,11 +89,11 @@ class EmpresaResource extends Resource
                     ->label('Activa'),
             ])
             ->actions([
-                \Filament\Actions\EditAction::make(),
+                EditAction::make(),
             ])
             ->bulkActions([
-                \Filament\Actions\BulkActionGroup::make([
-                    \Filament\Actions\DeleteBulkAction::make(),
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
